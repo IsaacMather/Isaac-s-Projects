@@ -14,6 +14,13 @@ os.chdir(r'Directory path')
 #get current working directory
 print(os.getcwd())
 
+#pull attachments from MS Outlook
+#https://stackoverflow.com/questions/39656433/how-to-download-outlook-attachment-from-python-script
+
+
+
+
+
 #opens the files and selects only the columns we want
 main = pd.read_excel(r'File Name.xlsx',index_col = None, usecols='Selected Columns')
 secondary = pd.read_excel(r'Secondary File Name.xlsx',index_col = None, usecols = 'Selected Columns')
