@@ -33,7 +33,7 @@ def attachment_combiner(df):
     for Eloqua_file in files:
         print(Eloqua_file)
         POA_file = df[Eloqua_file]
-        os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team')
+        #os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team') need to get this chdir running
         main = pd.read_excel(Eloqua_file,index_col = None)
         os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team')
         secondary = pd.read_excel(POA_file,index_col = None)
