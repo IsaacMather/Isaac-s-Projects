@@ -41,16 +41,18 @@ saveattachments(subject)
 #create a dictionary using the reference sheet
 os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments')
 df = pd.read_excel(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\POA_Eloqua_email_and_lists.xlsx')
-dictionary = df.to_dict()
+df.to_dict()
 #os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team')
+print(df)
 
 #function to find a filename and its corresponding key, then combine the file and its key
 ######need to get the merge key set up for all spreadsheets
 ######probably run a test run on one file in a new file, will need to reset the directories
-def attachment_combiner(dictionary):
+def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
-    for Eloqua_file in files():
-        POA_file = dictionary[Eloqua_file]
+    print(files)
+    for Eloqua_file in files:
+        POA_file = df[Eloqua_file]
         main = pd.read_excel(Eloqua_file,index_col = None)
         os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team')
         secondary = pd.read_excel(POA_file,index_col = None)
@@ -61,7 +63,8 @@ def attachment_combiner(dictionary):
         file_name = 'test results'
         combined.to_excel(file_name, index=False)
 
-attachment_combiner(dictionary)
+attachment_combiner(df)
+
 
 def mail_new_file():
     #send the file in an Outlook email
