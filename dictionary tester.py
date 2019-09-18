@@ -1,3 +1,5 @@
+ss
+
 #this library is to set the directory
 import os
 
@@ -18,7 +20,6 @@ df = pd.read_excel(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Me
 df.to_dict()
 #os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team')
 print(df)
-
 
 #function to find a filename and its corresponding key, then combine the file and its key
 ######need to get the merge key set up for all spreadsheets
