@@ -20,17 +20,15 @@ df.to_dict()
 #os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team')
 print(df)
 
-print('in df:')
-print('WelcomeJS_01-31-19_Email.xlsx' in df)
-
-
 #function to find a filename and its corresponding key, then combine the file and its key
 ######need to get the merge key set up for all spreadsheets
 ######probably run a test run on one file in a new file, will need to reset the directories
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
     print(files)
+    print(files in df)
     for Eloqua_file in files:
+        print(Eloqua_file)
         POA_file = df[Eloqua_file]
         main = pd.read_excel(Eloqua_file,index_col = None)
         os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team')
