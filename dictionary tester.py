@@ -26,7 +26,6 @@ print(df)
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
     print(files)
-    print(files in df)
     for Eloqua_file in files:
         print(Eloqua_file)
         POA_file = df[Eloqua_file]
