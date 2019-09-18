@@ -1,4 +1,3 @@
-ss
 
 #this library is to set the directory
 import os
@@ -27,7 +26,7 @@ print(df)
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
     print(files)
-    for Eloqua_file in files():
+    for Eloqua_file in files:
         POA_file = df[Eloqua_file]
         main = pd.read_excel(Eloqua_file,index_col = None)
         os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team')
@@ -40,3 +39,4 @@ def attachment_combiner(df):
         combined.to_excel(file_name, index=False)
 
 attachment_combiner(df)
+
