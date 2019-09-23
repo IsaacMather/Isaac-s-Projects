@@ -26,8 +26,8 @@ for key, val in df.items():
 
 
 #function to find a filename and its corresponding key, then combine the file and its key
-#-------need to get the merge key set up for all spreadsheets
-#-------set it so it can iterate through multiple sheets in an excel file
+#-------set it so it can iterate through multiple sheets in an excel file-------#####################################
+#-------need to start making sure the combination is going right---------###############################
 
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
