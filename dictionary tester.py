@@ -44,6 +44,7 @@ def attachment_combiner(df):
         #combined = combined.drop_duplicates(subset=['Tax ID','Opportunity ID'],keep='first', inplace=False)
         file_name = Eloqua_file +  ' done by Python.xlsx'
         combined.to_excel(file_name, index=False)
+        print('combination complete! file saved to folder!')
 
 attachment_combiner(df)
 
