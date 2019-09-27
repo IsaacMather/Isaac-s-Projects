@@ -45,33 +45,33 @@ df = df.set_index('Eloqua File Name')['POA File Name'].to_dict()
 #os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team')
 #print(df)
 
-for key, val in df.items():
-    print(key, "=>", val)
+##for key, val in df.items():
+##    print(key, "=>", val)
 
 
 #function to find a filename and its corresponding key, then combine the file and its key
 #-------need to get the merge key set up for all spreadsheets
 #-------set it so it can iterate through multiple sheets in an excel file
+#####clean up the directories by making them dynamic! :)
 
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
-    print(files)
     for Eloqua_file in files:
-        Eloqua_sheets = 
-
-
-        print(Eloqua_file)
         POA_file = df[Eloqua_file]
+        print(Eloqua_file)
         os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
-        main = pd.read_excel(Eloqua_file,index_col = None)
-        os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files')
-        secondary = pd.read_excel(POA_file,index_col = None)
-        combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')
-        os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists')
-        #combined = combined.drop_duplicates(subset=['Tax ID','Opportunity ID'],keep='first', inplace=False)
-        file_name = Eloqua_file +  ' done by Python.xlsx'
-        combined.to_excel(file_name, index=False)
-        print('combination complete! file saved to folder!')
+        sheets = pd.ExcelFile(Eloqua_file)
+        sheets = sheets.sheet_names
+        for Eloqua_sheet in sheets:
+            #print(Eloqua_sheets)    
+            main = pd.read_excel(Eloqua_file, sheet_name = Eloqua_sheet, index_col = None)
+            os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files')
+            secondary = pd.read_excel(POA_file, sheet_name = Eloqua_sheet, index_col = None)
+            combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')
+            os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists')
+            file_name = Eloqua_file + ' + ' + Eloqua_sheet + ' done by Python.xlsx'
+            combined.to_excel(file_name, index=False)
+            print('combination complete! file saved to folder!')
 
 attachment_combiner(df)
 
