@@ -49,11 +49,11 @@ df = df.set_index('Eloqua File Name')['POA File Name'].to_dict()
 ##    print(key, "=>", val)
 
 
-#function to find a filename and its corresponding key, then combine the file and its key
-#-------need to get the merge key set up for all spreadsheets
-#-------set it so it can iterate through multiple sheets in an excel file
-#####clean up the directories by making them dynamic! :)
+#####clean up the directories by making them dynamic
+#####get the new file out of the attachment combiner function
+#####get the file into the file mailer function
 
+#function to find a filename and its corresponding key, then combine the file and its key
 def attachment_combiner(df):
     files = os.listdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
     for Eloqua_file in files:
@@ -75,7 +75,6 @@ def attachment_combiner(df):
 
 attachment_combiner(df)
 
-##
 ##def mail_new_file():
 ##    #send the file in an Outlook email
 ##    import win32com.client
