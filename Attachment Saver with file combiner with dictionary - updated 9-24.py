@@ -38,10 +38,10 @@ import datetime
 ##saveattachments(subject)
 
 
-dataframe_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
-eloqua_results = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test'
-POA_lists = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
-combined_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
+##dataframe_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
+##eloqua_results = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test'
+##POA_lists = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
+##combined_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
 
 
 #create a dictionary using the reference sheet. ferences the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID.
@@ -60,6 +60,7 @@ df = df.set_index('Eloqua File Name')['POA File Name'].to_dict()
 #####clean up the directories by making them dynamic
 #####get the new file out of the attachment combiner function
 #####get the file into the file mailer function
+#####need to retrieve the opportunity ID from salesforce
 
 #function to find a filename and its corresponding key, then combine the file and its key
 def attachment_combiner(df):
