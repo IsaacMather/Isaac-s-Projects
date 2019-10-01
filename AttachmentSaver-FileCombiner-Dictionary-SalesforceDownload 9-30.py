@@ -29,7 +29,7 @@ import requests
 
 ##attempt 3:
 ##https://salesforce.stackexchange.com/questions/47414/download-a-report-using-python
-
+##also look at: https://www.youtube.com/watch?v=iKaFa3N2Nhw
 reportid = '00O4O000003uOwI'
 
 def sfdc_to_pd(reportid):
