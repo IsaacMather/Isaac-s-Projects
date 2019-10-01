@@ -15,6 +15,17 @@ import datetime
 ##or from 'Today's' date.without altering the file name. Just pass the 'Subject' argument.
 ##https://stackoverflow.com/questions/39656433/how-to-download-outlook-attachment-from-python-script
 
+
+
+#download the necessary report from salesforce
+import requests
+l = requests.get("https://login.salesforce.com/?un=USERNAME&pw=PASSWORD")
+d = requests.get("https://na3.salesforce.com/REPORT_ID?view=d&snip&export=1&enc=UTF-8&xf=csv",cookies=l.cookies)
+print d.content
+
+
+
+
 ##def saveattachments(subject):
 ##    path = os.path.expanduser(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments')
 ##    today = datetime.date.today()
