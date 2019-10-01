@@ -4,6 +4,8 @@ import os
 #these libraries are to manipulate the excel files
 import pandas as pd
 import openpyxl
+import csv
+
 
 #this library is to interact with MS Outlook
 import win32com.client as win32
@@ -12,8 +14,9 @@ import win32com.client as win32
 import datetime
 
 #this library is to manipulate salesforce
-from salesforce_reporting import Connection, ReportParser
-
+from simple_salesforce import Salesforce
+from login import *
+import requests
 
 ##The below code helps by downloading the attachments from outlook emails that are 'Unread' (and changes the mail to Read.)
 ##or from 'Today's' date.without altering the file name. Just pass the 'Subject' argument.
@@ -23,11 +26,49 @@ from salesforce_reporting import Connection, ReportParser
 
 #download the necessary report from salesforcefrom salesforce_reporting import Connection
 
-sf = Connection(username='isaama2@vsp.com', password='c@lmBunny13', security_token='szDUtiFW0gVMmrU72vhGhyyj')
-report = sf.get_report('Eloqua Opportunity ID Reference', includeDetails=True)
-parser = salesforce_reporting.ReportParser(report)
 
-parser.records()
+##attempt 3:
+##https://salesforce.stackexchange.com/questions/47414/download-a-report-using-python
+
+reportid = '00O4O000003uOwI'
+
+def sfdc_to_pd(reportid):
+    #login_data = {'un': 'your_username', 'pw': 'your_password'}
+    with requests.session() as s:
+    #s.get('https://vsp.my.salesforce.com', params = login_data)
+        d = requests.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))#, headers=s.headers, cookies=s.cookies)
+        lines = d.content.splitlines()
+        reader = csv.reader(lines)
+        data = list(reader)
+        data = data[:-7]
+        df = pd.DataFrame(data)
+        df.columns = df.iloc[0]
+        df = df.drop(0)
+        return df
+        print(df)
+
+sfdc_to_pd(reportid)
+
+##attempt1:
+
+##sf=Salesforce(username='isaama2@vsp.com',
+##              password='c@lmBunny11',
+##              security_token='szDUtiFW0gVMmrU72vhGhyyj')
+##              instance_url = 'vsp.my.salesforce.com',
+##              sandbox=True)
+##report_id = '00O4O000003uOwI'
+##print('login successful')
+
+
+##attempt 2:
+##sf = Connection(username='isaama2@vsp.com', password='c@lmBunny13', security_token='szDUtiFW0gVMmrU72vhGhyyj')
+##report = sf.get_report('Eloqua Opportunity ID Reference', includeDetails=True)
+##parser = salesforce_reporting.ReportParser(report)
+##
+##parser.records()
+
+
+
 
 
 
