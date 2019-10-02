@@ -17,6 +17,8 @@ import datetime
 from simple_salesforce import Salesforce
 from login import *
 import requests
+import base64
+import json
 
 ##The below code helps by downloading the attachments from outlook emails that are 'Unread' (and changes the mail to Read.)
 ##or from 'Today's' date.without altering the file name. Just pass the 'Subject' argument.
@@ -26,28 +28,41 @@ import requests
 
 #download the necessary report from salesforcefrom salesforce_reporting import Connection
 
+#attempt 4
+##https://stackoverflow.com/questions/48443107/export-salesforce-report-as-csv
+https://stackoverflow.com/questions/22853232/importing-salesforce-report-data-using-python
+
+reportid = '00O4O000003uOwI'
+with requests.session() as s:
+    d = s.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))
+    
 
 ##attempt 3:
 ##https://salesforce.stackexchange.com/questions/47414/download-a-report-using-python
 ##also look at: https://www.youtube.com/watch?v=iKaFa3N2Nhw
-reportid = '00O4O000003uOwI'
+##reportid = '00O4O000003uOwI'
+##
+##def sfdc_to_pd(reportid):
+##    #login_data = {'un': 'your_username', 'pw': 'your_password'}
+##    with requests.session() as salesforce_session:
+##        #salesforce_session.get('https://vsp.my.salesforce.com')
+##        response = requests.get("https://vsp.my.salesforce.com?view=d&snip&export=1&enc=UTF-8&xf=csv", headers = salesforce_session.headers)#, cookies = {'sid' : sid})
+##        lines = response.content
+##        print(lines)
+##        lines = lines.splitlines()
+##        reader = list(csv.reader(lines))        
+##        print('file saved')
+##        data = list(reader)
+##        for row in data:
+##            print(row)
+##        data = data[:-7]
+##        df = pd.DataFrame(data)
+##        df.columns = df.iloc[0]
+##        df = df.drop(0)
+##        return df
+##        print(df)
 
-def sfdc_to_pd(reportid):
-    #login_data = {'un': 'your_username', 'pw': 'your_password'}
-    with requests.session() as s:
-    #s.get('https://vsp.my.salesforce.com', params = login_data)
-        d = requests.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))#, headers=s.headers, cookies=s.cookies)
-        lines = d.content.splitlines()
-        reader = csv.reader(lines)
-        data = list(reader)
-        data = data[:-7]
-        df = pd.DataFrame(data)
-        df.columns = df.iloc[0]
-        df = df.drop(0)
-        return df
-        print(df)
-
-sfdc_to_pd(reportid)
+##sfdc_to_pd(reportid)
 
 ##attempt1:
 
@@ -63,9 +78,9 @@ sfdc_to_pd(reportid)
 ##attempt 2:
 ##sf = Connection(username='isaama2@vsp.com', password='c@lmBunny13', security_token='szDUtiFW0gVMmrU72vhGhyyj')
 ##report = sf.get_report('Eloqua Opportunity ID Reference', includeDetails=True)
-##parser = salesforce_reporting.ReportParser(report)
-##
-##parser.records()
+    ##parser = salesforce_reporting.ReportParser(report)
+    ##
+    ##parser.records()
 
 
 
