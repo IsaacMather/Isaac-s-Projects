@@ -9,7 +9,7 @@ import csv
 
 #this library is to interact with MS Outlook
 import win32com.client as win32
-
+`
 #this library is to check todays date
 import datetime
 
@@ -30,13 +30,20 @@ import json
 
 #attempt 4
 ##https://stackoverflow.com/questions/48443107/export-salesforce-report-as-csv
-https://stackoverflow.com/questions/22853232/importing-salesforce-report-data-using-python
+##https://stackoverflow.com/questions/22853232/importing-salesforce-report-data-using-python
 
 reportid = '00O4O000003uOwI'
-with requests.session() as s:
-    d = s.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))
-    
 
+
+sf = Salesforce(username=isaama2@vsp.com, password=c@lmBunny13, security_token = 'szDUtiFW0gVMmrU72vhGhyyj')
+
+login_data = {'username': isaama2@vsp.com, 'password': c@lmBunny13szDUtiFW0gVMmrU72vhGhyyj}
+
+with requests.session() as s:
+    d = s.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid), headers=sf.headers, cookies={'sid': sf.session_id})
+    
+    
+    
 ##attempt 3:
 ##https://salesforce.stackexchange.com/questions/47414/download-a-report-using-python
 ##also look at: https://www.youtube.com/watch?v=iKaFa3N2Nhw
