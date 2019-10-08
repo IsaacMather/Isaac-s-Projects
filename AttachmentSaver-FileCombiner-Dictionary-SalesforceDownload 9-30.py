@@ -34,7 +34,7 @@ https://stackoverflow.com/questions/22853232/importing-salesforce-report-data-us
 
 reportid = '00O4O000003uOwI'
 with requests.session() as s:
-    d = s.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))
+    d = s.get("https://your_instance.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid), headers=sf.headers, cookies={'sid': sf.session_id})
     
 
 ##attempt 3:
