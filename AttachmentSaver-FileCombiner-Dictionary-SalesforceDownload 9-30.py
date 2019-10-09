@@ -27,49 +27,6 @@ import beatbox
 
 #download the necessary report from salesforcefrom salesforce_reporting import Connection
 
-sf_username = "isaama2@vsp.com"
-sf_password = "c@lmBunny13"
-sf_api_token = "szDUtiFW0gVMmrU72vhGhyyj"    
-
-def get_opportunity_ids(email)
-    sf_client = beatbox.PythonClient()
-    password = str("%s%s" % (sf_password, sf_api_token))
-    sf_client.login(sf_username, password)
-    lead_qry = "SELECT id, Email, FirstName, LastName, OwnerId FROM Lead WHERE Email = '%s'" % (email)
-    records = sf_client.query(lead_qry)
-    return records
-
-
-<<<<<<< HEAD
-reportid = '00O4O000003uOwI'
-with requests.session() as s:
-    d = s.get("https://your_instance.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid), headers=sf.headers, cookies={'sid': sf.session_id})
-    
-=======
->>>>>>> df65bdf57d88b0cb8e93c5803354564309748d3e
-
-##attempt 3:
-##https://salesforce.stackexchange.com/questions/47414/download-a-report-using-python
-##also look at: https://www.youtube.com/watch?v=iKaFa3N2Nhw
-##reportid = '00O4O000003uOwI'
-##def sfdc_to_pd(reportid):
-##    #login_data = {'un': 'your_username', 'pw': 'your_password'}
-##    with requests.session() as s:
-##        s.get('https://vsp.my.salesforce.com')
-##        d = requests.get("https://vsp.my.salesforce.com/{}?export=1&enc=UTF-8&xf=csv".format(reportid))
-##        print(d)
-##        lines = d.content.splitlines()
-##        reader = csv.reader(lines)
-##        data = list(reader)
-##        data = data[:-7]
-##        df = pd.DataFrame(data)
-##        df.columns = df.iloc[0]
-##        df = df.drop(0)
-##        return df
-##        print(df)
-
-    
-##fdc_to_pd(reportid)
 
 
 
