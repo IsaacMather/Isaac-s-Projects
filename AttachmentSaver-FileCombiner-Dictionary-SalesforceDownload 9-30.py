@@ -8,52 +8,45 @@ import csv
 
 
 #this library is to interact with MS Outlook
-#import win32com.client as win32
+import win32com.client as win32
 
 #this library is to check todays date
 import datetime
 
-#this library is to manipulate salesforce
-from pandas import DataFrame, Series 
-from simple_salesforce import Salesforce #imported salesforce
-import beatbox
+
+#####download the necessary report from salesforcefrom salesforce_reporting import Connection
+
 
 
 ##The below code helps by downloading the attachments from outlook emails that are 'Unread' (and changes the mail to Read.)
 ##or from 'Today's' date.without altering the file name. Just pass the 'Subject' argument.
 ##https://stackoverflow.com/questions/39656433/how-to-download-outlook-attachment-from-python-script
+test_file_directory = 'C:\\Users\\isaama2\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Python 3.7\\Test Programs\\Test Attachments\\'
+subject = 'Working with Global Analytics and Insights Team Checklist (002)'
 
-
-
-#download the necessary report from salesforcefrom salesforce_reporting import Connection
-
-
-
-
-##def saveattachments(subject):
-##    path = os.path.expanduser(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments')
-##    today = datetime.date.today()
-##    outlook = win32.Dispatch("Outlook.Application").GetNamespace("MAPI")
-##    inbox = outlook.GetDefaultFolder(6) 
-##    messages = inbox.Items
-##    #set the title of the email you want to look for here. can we use regex to make flexible email title searches?
-##    subject = 'Working with Global Analytics and Insights Team Checklist (002)'
-##    for message in messages:
-##        if message.Subject == subject: #and message.Unread or message.Senton.date() == today:
-##            #body_content = message.body
-##            attachments = message.Attachments
-##            attachment = attachments.Item(1)
-##            for attachment in message.Attachments:
-##                attachment.SaveAsFile(os.path.join(path, str(attachment)))
-##                #if message.Subject == subject and message.Unread:
-##                #    message.Unread = False
-##                print('Attachment Saved!')
-##                break
+def saveattachments(subject):
+    path = os.path.expanduser(r'test_file_directory')
+    today = datetime.date.today()
+    outlook = win32.Dispatch("Outlook.Application").GetNamespace("MAPI")
+    inbox = outlook.GetDefaultFolder(6) 
+    messages = inbox.Items
+    #set the title of the email you want to look for here. can we use regex to make flexible email title searches?
+    for message in messages:
+        if message.Subject == subject: #and message.Unread or message.Senton.date() == today:
+            #body_content = message.body
+            attachments = message.Attachments
+            attachment = attachments.Item(1)
+            for attachment in message.Attachments:
+                attachment.SaveAsFile(os.path.join(path, str(attachment)))
+                #if message.Subject == subject and message.Unread:
+                #    message.Unread = False
+                print('Attachment Saved!')
+                break
             
-##saveattachments(subject)
+saveattachments(subject)
 
 
-##dataframe_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
+
 ##eloqua_results = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test'
 ##POA_lists = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
 ##combined_directory = 'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
