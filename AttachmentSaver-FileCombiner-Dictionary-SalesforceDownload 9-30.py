@@ -24,8 +24,9 @@ import datetime
 test_file_directory = 'C:\\Users\\isaama2\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Python 3.7\\Test Programs\\Test Attachments\\'
 subject = 'Working with Global Analytics and Insights Team Checklist (002)'
 
-def saveattachments(subject):
-    path = os.path.expanduser(r'test_file_directory')
+def saveattachments(subject, test_file_directory):
+    path = os.path.expanduser(test_file_directory)
+    print(path)
     today = datetime.date.today()
     outlook = win32.Dispatch("Outlook.Application").GetNamespace("MAPI")
     inbox = outlook.GetDefaultFolder(6) 
@@ -43,7 +44,7 @@ def saveattachments(subject):
                 print('Attachment Saved!')
                 break
             
-saveattachments(subject)
+saveattachments(subject, test_file_directory)
 
 
 
