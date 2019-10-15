@@ -47,9 +47,7 @@ eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Win
 ##                break
 ##            
 ##saveattachments(email_subject, eloqua_results_file_locations)
-##
-##
-##
+
 
 
 
@@ -70,9 +68,17 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
 eloqua_results_dictionary = dictionary_creater(eloqua_results_directory)
 
 
+
+
+
+
 ###~~~this code checks if we successfully created the dictionary to correlate eloqua results files with POA lists
 ##for key, val in eloqua_results_dictionary.items():
 ##    print(key, "=>", val)
+
+
+
+
 
 
 
@@ -133,7 +139,7 @@ opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_locatio
 
 
 #function to send each file that has been combined with Opportunity ID and in an Outlook email
-def mail_new_file(new_combined_file_with_opportunity_ID_directory):
+def mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory):
 	outlook = win32.Dispatch('outlook.application')
     files = os.listdir(new_combined_file_with_opportunity_ID_directory)
     for file in files:
@@ -149,4 +155,4 @@ def mail_new_file(new_combined_file_with_opportunity_ID_directory):
     	#clarify it worked
     print('Operation successful!')
 
-mail_new_file(new_combined_file_with_opportunity_ID_directory)
+mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory)
