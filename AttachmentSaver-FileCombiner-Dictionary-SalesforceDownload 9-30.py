@@ -103,6 +103,11 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, PO
 
 
 
+
+
+
+
+
 #function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
 opportunity_ID_file_location = ####need this content
 new_combined_file_with_opportunity_ID_directory = ####need this content
@@ -115,27 +120,33 @@ def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_loc
 		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')
 		os.chdir(new_combined_file_with_opportunity_ID_directory)
 		pd.to_excel(combined_file + 'with opportunity ID', index = False)
-
+		
 opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
 
 
 
 
+
+
+
+
+
 #function to send each file that has been combined with Opportunity ID and in an Outlook email
-##def mail_new_file():
-##    outlook = win32.Dispatch('outlook.application')
-		
-##    mail = outlook.CreateItem(0)
-##    mail.To = 'isaama2@vsp.com'
-##    mail.Subject = 'Perfect Pair Rebate List'
-##    mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
-##    attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
-##    #attachment = directory + \ + file_name
-##    print('working correctly')
-##    mail.Attachments.Add(attachment)
-##    mail.Send()
-##    #clarify it worked
-##    print('Operation successful!')
-##
-##mail_new_file()
+def mail_new_file(new_combined_file_with_opportunity_ID_directory):
+	outlook = win32.Dispatch('outlook.application')
+    files = os.listdir(new_combined_file_with_opportunity_ID_directory)
+    for file in files:
+		mail = outlook.CreateItem(0)    
+    	mail.To = 'isaama2@vsp.com'
+    	mail.Subject = 'Perfect Pair Rebate List'
+    	mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
+    	attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
+    	#attachment = directory + '\\' + file_name #will this work? putting the slash infront of this?
+    	print('working correctly')
+    	mail.Attachments.Add(attachment)
+    	mail.Send()
+    	#clarify it worked
+    print('Operation successful!')
+
+mail_new_file(new_combined_file_with_opportunity_ID_directory)
