@@ -104,17 +104,17 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, PO
 
 
 #function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
-opportunity_ID_file_location = 
-new_combined_file_with_opportunity_ID_directory = 
+opportunity_ID_file_location = ####need this content
+new_combined_file_with_opportunity_ID_directory = ####need this content
 def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
 	os.chdir(combined_results_file_location)
 	files = os.listdir(combined_results_file_location)
 	for combined_file in files:
 		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
 		combined_results_file = pd.read_excel(combined_file, index_col = None)		
-		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True)
-		os.chdir(
-
+		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')
+		os.chdir(new_combined_file_with_opportunity_ID_directory)
+		pd.to_excel(combined_file + 'with opportunity ID', index = False)
 
 opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
@@ -122,11 +122,10 @@ opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_locatio
 
 
 
-
+#function to send each file that has been combined with Opportunity ID and in an Outlook email
 ##def mail_new_file():
-##    #send the file in an Outlook email
-##    import win32com.client
 ##    outlook = win32.Dispatch('outlook.application')
+		
 ##    mail = outlook.CreateItem(0)
 ##    mail.To = 'isaama2@vsp.com'
 ##    mail.Subject = 'Perfect Pair Rebate List'
