@@ -105,17 +105,18 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, PO
 
 #function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
 opportunity_ID_file_location = 
-def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location):
+new_combined_file_with_opportunity_ID_directory = 
+def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
 	os.chdir(combined_results_file_location)
 	files = os.listdir(combined_results_file_location)
 	for combined_file in files:
 		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
 		combined_results_file = pd.read_excel(combined_file, index_col = None)		
 		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True)
+		os.chdir(
 
 
-
-opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location)
+opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
 
 
