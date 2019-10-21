@@ -26,7 +26,6 @@ import datetime
 ##https://stackoverflow.com/questions/39656433/how-to-download-outlook-attachment-from-python-script
 eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
 ##email_subject = 'Working with Global Analytics and Insights Team Checklist (002)'
-##
 ##def saveattachments(email_subject, eloqua_results_file_locations):
 ##    eloqua_results_file_locations = os.path.expanduser(eloqua_results_directory)
 ##    print(path)
@@ -48,9 +47,6 @@ eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Win
 ##                break
 ##            
 ##saveattachments(email_subject, eloqua_results_file_locations)
-##
-##
-##
 
 
 
@@ -58,12 +54,10 @@ eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Win
 
 
 
-POA_Eloqua_Team_Dataframe_Location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
 
-##POA_lists = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
-##combined_directory = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
 
 #~~~create a dictionary using the reference sheet. references the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID. Then saves the combined sheet
+POA_Eloqua_Team_Dataframe_Location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
 def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
     os.chdir(POA_Eloqua_Team_Dataframe_Location)
     #get the read excel to just open the dataframe name
@@ -74,6 +68,10 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
 eloqua_results_dictionary = dictionary_creater(eloqua_results_directory)
 
 
+
+
+
+
 ###~~~this code checks if we successfully created the dictionary to correlate eloqua results files with POA lists
 ##for key, val in eloqua_results_dictionary.items():
 ##    print(key, "=>", val)
@@ -82,27 +80,54 @@ eloqua_results_dictionary = dictionary_creater(eloqua_results_directory)
 
 
 
+
+
 #function to find a filename and its corresponding key, then combine the file and its key
-def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations):
+combined_results_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
+POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
+def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
     files = os.listdir(eloqua_results)
     for Eloqua_file in files:
         POA_file = eloqua_results_dictionary[Eloqua_file]
         print(Eloqua_file)
-        os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test')
+        os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\Test') #you can put eloqua_results_file_locations here
         sheets = pd.ExcelFile(Eloqua_file)
         sheets = sheets.sheet_names
         for Eloqua_sheet in sheets:
             #print(Eloqua_sheets)    
             main = pd.read_excel(Eloqua_file, sheet_name = Eloqua_sheet, index_col = None)
-            os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files')
+            os.chdir(POA_lists_file_location)
             secondary = pd.read_excel(POA_file, sheet_name = Eloqua_sheet, index_col = None)
             combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')
-            os.chdir(r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists')
+            os.chdir(combined_results_file_location)
             file_name = Eloqua_file + ' + ' + Eloqua_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
             print('combination complete! file saved to folder!')
 
-attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations)
+attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
+
+
+
+
+
+
+
+
+
+#function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
+opportunity_ID_file_location = ####need this content
+new_combined_file_with_opportunity_ID_directory = ####need this content
+def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
+	os.chdir(combined_results_file_location)
+	files = os.listdir(combined_results_file_location)
+	for combined_file in files:
+		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
+		combined_results_file = pd.read_excel(combined_file, index_col = None)		
+		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')
+		os.chdir(new_combined_file_with_opportunity_ID_directory)
+		pd.to_excel(combined_file + 'with opportunity ID', index = False)
+		
+opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
 
 
@@ -113,21 +138,21 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations)
 
 
 
+#function to send each file that has been combined with Opportunity ID and in an Outlook email
+def mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory):
+	outlook = win32.Dispatch('outlook.application')
+    files = os.listdir(new_combined_file_with_opportunity_ID_directory)
+    for file in files:
+		mail = outlook.CreateItem(0)    
+    	mail.To = 'isaama2@vsp.com'
+    	mail.Subject = 'Perfect Pair Rebate List'
+    	mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
+    	attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
+    	#attachment = directory + '\\' + file_name #will this work? putting the slash infront of this?
+    	print('working correctly')
+    	mail.Attachments.Add(attachment)
+    	mail.Send()
+    	#clarify it worked
+    print('Operation successful!')
 
-##def mail_new_file():
-##    #send the file in an Outlook email
-##    import win32com.client
-##    outlook = win32.Dispatch('outlook.application')
-##    mail = outlook.CreateItem(0)
-##    mail.To = 'isaama2@vsp.com'
-##    mail.Subject = 'Perfect Pair Rebate List'
-##    mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
-##    attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
-##    #attachment = directory + \ + file_name
-##    print('working correctly')
-##    mail.Attachments.Add(attachment)
-##    mail.Send()
-##    #clarify it worked
-##    print('Operation successful!')
-##
-##mail_new_file()
+mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory)
