@@ -38,28 +38,27 @@ import datetime
 ##The below code helps by downloading the attachments from outlook emails that are 'Unread' (and changes the mail to Read.) or from 'Today's' date.without altering the file name. Just pass the 'Subject' argument.
 ##https://stackoverflow.com/questions/39656433/how-to-download-outlook-attachment-from-python-script
 eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email List Results Sent to POA Team\September'
-##email_subject = 'FW: September'
-##def saveattachments(email_subject, eloqua_results_file_locations):
-##    path = eloqua_results_file_locations
-##    #print(path)
-##    today = datetime.date.today()
-##    outlook = win32.Dispatch("Outlook.Application").GetNamespace("MAPI")
-##    inbox = outlook.GetDefaultFolder(6) 
-##    messages = inbox.Items
-##    #set the title of the email you want to look for here. can we use regex to make flexible email title searches?
-##    for message in messages:
-##        if message.Subject == email_subject: #and message.Unread or message.Senton.date() == today:
-##            #body_content = message.body
-##            attachments = message.Attachments
-##            attachment = attachments.Item(1)
-##            for attachment in message.Attachments:
-##                attachment.SaveAsFile(os.path.join(path, str(attachment)))
-##                #if message.Subject == subject and message.Unread:
-##                #    message.Unread = False
-##                print('Attachment Saved!')
-##            
+email_subject = 'FW: September'
+def saveattachments(email_subject, eloqua_results_file_locations):
+    path = eloqua_results_file_locations
+    #print(path)
+    today = datetime.date.today()
+    outlook = win32.Dispatch("Outlook.Application").GetNamespace("MAPI")
+    inbox = outlook.GetDefaultFolder(6) 
+    messages = inbox.Items
+    #set the title of the email you want to look for here. can we use regex to make flexible email title searches?
+    for message in messages:
+        if message.Subject == email_subject: #and message.Unread or message.Senton.date() == today:
+            #body_content = message.body
+            attachments = message.Attachments
+            attachment = attachments.Item(1)
+            for attachment in message.Attachments:
+                attachment.SaveAsFile(os.path.join(path, str(attachment)))
+                #if message.Subject == subject and message.Unread:
+                #    message.Unread = False
+                print('Attachment Saved!')
+            
 ##saveattachments(email_subject, eloqua_results_file_locations)
-##
 
 
 
@@ -108,55 +107,47 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             os.chdir(combined_results_file_location)
             file_name = Eloqua_file + ' + ' + Eloqua_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
-            print('combination complete! file saved to folder!')
+        print('combination complete! file saved to folder!')
 
-attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
+#attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
 
 
-##
-##
-##
-##
-###function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
-##opportunity_ID_file_location = ####need this content
-##new_combined_file_with_opportunity_ID_directory = ####need this content
-##def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
-##	os.chdir(combined_results_file_location)
-##	files = os.listdir(combined_results_file_location)
-##	for combined_file in files:
-##		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
-##		combined_results_file = pd.read_excel(combined_file, index_col = None)		
-##		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')
-##		os.chdir(new_combined_file_with_opportunity_ID_directory)
-##		pd.to_excel(combined_file + 'with opportunity ID', index = False)
-##		
+
+
+
+
+#function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
+####need this content opportunity_ID_file_location = 
+####need this content new_combined_file_with_opportunity_ID_directory = 
+def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
+	os.chdir(combined_results_file_location)
+	files = os.listdir(combined_results_file_location)
+	for combined_file in files:
+		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
+		combined_results_file = pd.read_excel(combined_file, index_col = None)		
+		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')
+		os.chdir(new_combined_file_with_opportunity_ID_directory)
+		pd.to_excel(combined_file + 'with opportunity ID', index = False)
+		
 ##opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
-##
-##
-##
-##
-##
-##
 
-##
-##
-##
-###function to send each file that has been combined with Opportunity ID and in an Outlook email
-##def mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory):
-##	outlook = win32.Dispatch('outlook.application')
-##    files = os.listdir(new_combined_file_with_opportunity_ID_directory)
-##    for file in files:
-##		mail = outlook.CreateItem(0)    
-##    	mail.To = 'isaama2@vsp.com'
-##    	mail.Subject = 'Perfect Pair Rebate List'
-##    	mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
-##    	attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
-##    	#attachment = directory + '\\' + file_name #will this work? putting the slash infront of this?
-##    	print('working correctly')
-##    	mail.Attachments.Add(attachment)
-##    	mail.Send()
-##    	#clarify it worked
-##    print('Operation successful!')
-##
+
+#function to send each file that has been combined with Opportunity ID and in an Outlook email
+def mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory):
+        outlook = win32.Dispatch('outlook.application')
+        files = os.listdir(new_combined_file_with_opportunity_ID_directory)
+        for file in files:
+            mail = outlook.CreateItem(0)    
+            mail.To = 'isaama2@vsp.com'
+            mail.Subject = 'Perfect Pair Rebate List'
+            mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
+            attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
+            #attachment = directory + '\\' + file_name #will this work? putting the slash infront of this?
+            print('working correctly')
+            mail.Attachments.Add(attachment)
+            mail.Send()
+            #clarify it worked
+        print('Operation successful!')
+
 ##mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory)
