@@ -7,6 +7,15 @@
 
 
 
+############to make this work
+#1. Set the email subject on line 37
+#2. Set the sheet names in the POA lists to their equivelant sheet in the Eloqua results
+#3. Update the POA_Eloqua_email_and_lists.xlsx dataframe with the corfrelating POA lists and Eloqua Results names
+#4. Set the eloqua_results_file_locations for the correct month
+#5. Set the POA_lists_file_location for the correct month
+
+
+
 ######check to see if the dictionary is working right, and that file names are where they say they are
 
 
@@ -50,7 +59,7 @@ eloqua_results_file_locations = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Win
 ##                print('Attachment Saved!')
 ##            
 ##saveattachments(email_subject, eloqua_results_file_locations)
-
+##
 
 
 
@@ -64,6 +73,7 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
     #get the read excel to just open the dataframe name
     df = pd.read_excel('POA_Eloqua_email_and_lists.xlsx')
     eloqua_results_dictionary = df.set_index('Eloqua File Name')['POA File Name'].to_dict()
+    print(eloqua_results_dictionary)
     print('Dictionary made')
     return(eloqua_results_dictionary)
     
@@ -80,7 +90,7 @@ for key, val in eloqua_results_dictionary.items():
 
 ###function to find a filename and its corresponding key, then combine the file and its key
 combined_results_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
-POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\Old Files'
+POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\September Files'
 
 def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
     files = os.listdir(eloqua_results_file_locations)
