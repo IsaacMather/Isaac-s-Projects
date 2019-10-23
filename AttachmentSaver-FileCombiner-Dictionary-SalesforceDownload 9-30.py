@@ -72,7 +72,6 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
     #get the read excel to just open the dataframe name
     df = pd.read_excel('POA_Eloqua_email_and_lists.xlsx')
     eloqua_results_dictionary = df.set_index('POA File Name')['Eloqua File Name'].to_dict()
-    print(eloqua_results_dictionary)
     print('Dictionary made')
     return(eloqua_results_dictionary)
     
@@ -93,10 +92,11 @@ POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\S
 
 def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
     files = os.listdir(POA_lists_file_location)
-    os.chdir(POA_lists_file_location)
     for POA_file in files:
+        os.chdir(POA_lists_file_location)
         sheets = pd.ExcelFile(POA_file)
         sheets = sheets.sheet_names
+        print(sheets)
         for POA_sheet in sheets:
             Eloqua_file = eloqua_results_dictionary[POA_file]
             print(Eloqua_file)
@@ -107,7 +107,8 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             os.chdir(combined_results_file_location)
             file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
-        print('combination complete! file saved to folder!')
+            print('combination complete! file saved to folder!')
+    #return
 
 attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
