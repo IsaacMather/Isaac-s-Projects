@@ -71,7 +71,7 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
     os.chdir(POA_Eloqua_Team_Dataframe_Location)
     #get the read excel to just open the dataframe name
     df = pd.read_excel('POA_Eloqua_email_and_lists.xlsx')
-    eloqua_results_dictionary = df.set_index('Eloqua File Name')['POA File Name'].to_dict()
+    eloqua_results_dictionary = df.set_index('POA File Name')['Eloqua File Name'].to_dict()
     print(eloqua_results_dictionary)
     print('Dictionary made')
     return(eloqua_results_dictionary)
@@ -92,24 +92,24 @@ combined_results_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Wi
 POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\September Files'
 
 def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
-    files = os.listdir(eloqua_results_file_locations)
-    for Eloqua_file in files:
-        POA_file = eloqua_results_dictionary[Eloqua_file]
-        print(Eloqua_file)
-        os.chdir(eloqua_results_file_locations)
-        sheets = pd.ExcelFile(Eloqua_file)
+    files = os.listdir(POA_lists_file_location)
+    os.chdir(POA_lists_file_location)
+    for POA_file in files:
+        sheets = pd.ExcelFile(POA_file)
         sheets = sheets.sheet_names
-        for Eloqua_sheet in sheets:    
-            main = pd.read_excel(Eloqua_file, sheet_name = Eloqua_sheet, index_col = None)
-            os.chdir(POA_lists_file_location)
-            secondary = pd.read_excel(POA_file, sheet_name = Eloqua_sheet, index_col = None)
+        for POA_sheet in sheets:
+            Eloqua_file = eloqua_results_dictionary[POA_file]
+            print(Eloqua_file)
+            secondary = pd.read_excel(POA_file, sheet_name = POA_sheet, index_col = None)
+            os.chdir(eloqua_results_file_locations)
+            main = pd.read_excel(Eloqua_file, sheet_name = POA_sheet, index_col = None)
             combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')
             os.chdir(combined_results_file_location)
-            file_name = Eloqua_file + ' + ' + Eloqua_sheet + ' done by Python.xlsx'
+            file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
         print('combination complete! file saved to folder!')
 
-#attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
+attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
 
 
