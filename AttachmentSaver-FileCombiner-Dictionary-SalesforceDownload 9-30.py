@@ -6,7 +6,6 @@
 ##              5. need to combine the opportunity id with our combined results lists before they are mailed to the OPS team
 
 
-
 ############to make this work
 #1. Set the email subject on line 37
 #2. Set the sheet names in the POA lists to their equivelant sheet in the Eloqua results
@@ -15,12 +14,12 @@
 #5. Set the POA_lists_file_location for the correct month
 
 
-
 ######check to see if the dictionary is working right, and that file names are where they say they are
 
 
 #this library is to set the directory
 import os
+
 
 #these libraries are to manipulate the excel files
 import pandas as pd
@@ -30,6 +29,7 @@ import csv
 
 #this library is to interact with MS Outlook
 import win32com.client as win32
+
 
 #this library is to check todays date
 import datetime
@@ -57,12 +57,8 @@ def saveattachments(email_subject, eloqua_results_file_locations):
                 #if message.Subject == subject and message.Unread:
                 #    message.Unread = False
                 print('Attachment Saved!')
-            
+
 ##saveattachments(email_subject, eloqua_results_file_locations)
-
-
-
-
 
 
 ###~~~create a dictionary using the reference sheet. references the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID. Then saves the combined sheet
@@ -78,18 +74,14 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
 eloqua_results_dictionary = dictionary_creater(POA_Eloqua_Team_Dataframe_Location)
 
 
-
-
 ###~~~this code checks if we successfully created the dictionary to correlate eloqua results files with POA lists
 for key, val in eloqua_results_dictionary.items():
     print(key, "=>", val)
-
-
+    
 
 ###function to find a filename and its corresponding key, then combine the file and its key
 combined_results_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists'
 POA_lists_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Email Lists Sent to Eloqua Team\September Files'
-
 def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
     files = os.listdir(POA_lists_file_location)
     for POA_file in files:
@@ -105,7 +97,7 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             secondary = pd.read_excel(POA_file, sheet_name = POA_sheet, index_col = None)
             os.chdir(eloqua_results_file_locations)
             main = pd.read_excel(Eloqua_file, sheet_name = POA_sheet, index_col = None)
-            combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')
+            combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left') #define what you are combining on, and then make sure you are combining into file containing Eloqua results
             os.chdir(combined_results_file_location)
             file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
@@ -114,26 +106,20 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
 attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
 
-
-
 #function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
-##need this content opportunity_ID_file_location = 
-##need this content new_combined_file_with_opportunity_ID_directory = 
+opportunity_ID_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists\Opportunity ID Reference Folder' 
+new_combined_file_with_opportunity_ID_directory = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists\Updated Combined Lists With Opportunity ID'
 def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
-	os.chdir(combined_results_file_location)
 	files = os.listdir(combined_results_file_location)
 	for combined_file in files:
+                os.chdir(combined_results_file_location)
 		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
 		combined_results_file = pd.read_excel(combined_file, index_col = None)		
-		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')  #do I merge these on tax id or email address or what?
+		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')  #so say we have the same 
 		os.chdir(new_combined_file_with_opportunity_ID_directory)
 		pd.to_excel(combined_file + 'with opportunity ID', index = False)
 		
 ##opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
-
-
-
-
 
 
 #function to send each file that has been combined with Opportunity ID and in an Outlook email
