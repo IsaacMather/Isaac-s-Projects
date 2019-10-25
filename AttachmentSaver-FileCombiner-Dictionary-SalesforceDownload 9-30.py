@@ -67,8 +67,8 @@ eloqua_results_dictionary = dictionary_creater(POA_Eloqua_Team_Dataframe_Locatio
 
 
 ###~~~this code checks if we successfully created the dictionary to correlate eloqua results files with POA lists
-for key, val in eloqua_results_dictionary.items():
-    print(key, "=>", val)
+##for key, val in eloqua_results_dictionary.items():
+##    print(key, "=>", val)
     
 
 ###function to find a filename and its corresponding key, then combine the file and its key
@@ -103,16 +103,15 @@ opportunity_ID_file_location = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner F
 new_combined_file_with_opportunity_ID_directory = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Test File Combiner Folder\Test Files With Opportunity ID'
 def opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
     files = os.listdir(combined_results_file_location)
-    print(files)
-##    for combined_file in files:
-##                os.chdir(combined_results_file_location)
-##                combined_results_file = pd.read_excel(combined_file, index_col = None)
-##                opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx
-##                combined = pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', how = 'outer')  
-##                file_name = combined_file
-##                os.chdir(new_combined_file_with_opportunity_ID_directory)
-##                combined.to_excel(file_name, index = False)
-##                print('Opportunity ID Combination for ' + combined_file + 'complete!')
+    for combined_file in files:
+                os.chdir(combined_results_file_location)
+                combined_results_file = pd.read_excel(combined_file, index_col = None)
+                opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx
+                combined = pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', how = 'outer')  
+                file_name = combined_file
+                os.chdir(new_combined_file_with_opportunity_ID_directory)
+                combined.to_excel(file_name, index = False)
+                print('Opportunity ID Combination for ' + combined_file + 'complete!')
 
 opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
