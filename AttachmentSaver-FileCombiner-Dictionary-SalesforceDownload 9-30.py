@@ -101,7 +101,7 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             os.chdir(combined_results_file_location)
             file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
-            print('combination complete! file saved to folder!')
+            print('Eloqua combination complete! file saved to folder!')
 
 attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
@@ -110,16 +110,18 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, PO
 opportunity_ID_file_location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists\Opportunity ID Reference Folder' 
 new_combined_file_with_opportunity_ID_directory = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments\Combined Lists\Updated Combined Lists With Opportunity ID'
 def opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
-	files = os.listdir(combined_results_file_location)
-	for combined_file in files:
+    files = os.listdir(combined_results_file_location)
+    for combined_file in files:
                 os.chdir(combined_results_file_location)
-		opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
-		combined_results_file = pd.read_excel(combined_file, index_col = None)		
-		pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')  #so say we have the same 
-		os.chdir(new_combined_file_with_opportunity_ID_directory)
-		pd.to_excel(combined_file + 'with opportunity ID', index = False)
-		
-##opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
+                combined_results_file = pd.read_excel(combined_file, index_col = None)
+                os.chdir(opportunity_ID_file_location)
+                opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)
+                pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')  
+                os.chdir(new_combined_file_with_opportunity_ID_directory)
+                pd.to_excel(combined_file + 'with opportunity ID', index = False)
+                print('Opportunity ID Combination for' + combined_file + 'complete!')
+
+opportunity_ID_adder(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
 
 #function to send each file that has been combined with Opportunity ID and in an Outlook email
