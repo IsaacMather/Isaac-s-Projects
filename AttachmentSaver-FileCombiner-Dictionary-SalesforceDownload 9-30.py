@@ -5,7 +5,6 @@
 ##              4. need to retrieve the opportunity ID from salesforce\
 ##              5. need to combine the opportunity id with our combined results lists before they are mailed to the OPS team
 
-
 ############to make this work
 #1. Set the email subject on line 37
 #2. Set the sheet names in the POA lists to their equivelant sheet in the Eloqua results
@@ -13,23 +12,16 @@
 #4. Set the eloqua_results_file_locations for the correct month
 #5. Set the POA_lists_file_location for the correct month
 
-
-######check to see if the dictionary is working right, and that file names are where they say they are
-
-
 #this library is to set the directory
 import os
-
 
 #these libraries are to manipulate the excel files
 import pandas as pd
 import openpyxl
 import csv
 
-
 #this library is to interact with MS Outlook
 import win32com.client as win32
-
 
 #this library is to check todays date
 import datetime
@@ -61,7 +53,7 @@ def saveattachments(email_subject, eloqua_results_file_locations):
 ##saveattachments(email_subject, eloqua_results_file_locations)
 
 
-###~~~create a dictionary using the reference sheet. references the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID. Then saves the combined sheet
+###~##create a dictionary using the reference sheet. references the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID. Then saves the combined sheet
 POA_Eloqua_Team_Dataframe_Location = r'C:\Users\isaama2\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.7\Test Programs\Test Attachments'
 def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
     os.chdir(POA_Eloqua_Team_Dataframe_Location)
@@ -107,18 +99,19 @@ attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, PO
 
 
 #function to combine the results sheet, with the opportunity ID list, so they can be uploaded to salesforce
-opportunity_ID_file_location = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Opportunity ID Reference Folder\Opportunity ID Reference File.csv' 
+opportunity_ID_file_location = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Opportunity ID Reference Folder\Opportunity ID Reference File.xlsx' 
 new_combined_file_with_opportunity_ID_directory = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Test File Combiner Folder\Test Files With Opportunity ID'
 def opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
     files = os.listdir(combined_results_file_location)
     for combined_file in files:
                 os.chdir(combined_results_file_location)
                 combined_results_file = pd.read_excel(combined_file, index_col = None)
-                opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx not csv
-                pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', inplace = True, how = 'outer')  
+                opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx
+                combined = pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', how = 'outer')  
+                file_name = combined_file
                 os.chdir(new_combined_file_with_opportunity_ID_directory)
-                pd.to_excel(combined_file + 'with opportunity ID', index = False)
-                print('Opportunity ID Combination for' + combined_file + 'complete!')
+                combined.to_excel(file_name, index = False)
+                print('Opportunity ID Combination for ' + combined_file + 'complete!')
 
 opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory)
 
