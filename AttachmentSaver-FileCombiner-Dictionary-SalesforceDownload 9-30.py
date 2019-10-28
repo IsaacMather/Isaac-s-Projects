@@ -89,7 +89,8 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             secondary = pd.read_excel(POA_file, sheet_name = POA_sheet, index_col = None)
             os.chdir(eloqua_results_file_locations)
             main = pd.read_excel(Eloqua_file, sheet_name = POA_sheet, index_col = None)
-            combined = pd.merge(main, secondary['Contact: Primary Contact Email','Tax ID'], sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left') #make sure you are keeping just TaxID
+            combined = pd.merge(main, secondary[['Contact: Primary Contact Email','Tax ID']], sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left')  #get this cleanup drop working .drop('First Name','Last Name','SFDC Contact ID','Email Send Date')
+ #make sure you are keeping just TaxID
             os.chdir(combined_results_file_location)
             file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
@@ -107,7 +108,7 @@ def opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_
                 os.chdir(combined_results_file_location)
                 combined_results_file = pd.read_excel(combined_file, index_col = None)
                 opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx
-                combined = pd.merge(combined_results_file, opportunity_ID_file['Opportunity ID','Tax ID'], on = 'Tax ID', how = 'left') #set it to only keep the opportunity ID
+                combined = pd.merge(combined_results_file, opportunity_ID_file[['Opportunity ID','Tax ID']], on = 'Tax ID', how = 'left') #set it to only keep the opportunity ID
                 file_name = combined_file
                 os.chdir(new_combined_file_with_opportunity_ID_directory)
                 combined.to_excel(file_name, index = False)
