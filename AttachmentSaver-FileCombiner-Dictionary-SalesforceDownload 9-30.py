@@ -50,7 +50,7 @@ def saveattachments(email_subject, eloqua_results_file_locations):
                 #    message.Unread = False
                 print('Attachment Saved!')
 
-##saveattachments(email_subject, eloqua_results_file_locations)
+saveattachments(email_subject, eloqua_results_file_locations)
 
 
 ###~##create a dictionary using the reference sheet. references the dictionary to to know which file sent from the POA team to the eloqua team to use as a resource to retrieve TaxID. Then saves the combined sheet
@@ -89,7 +89,7 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
             secondary = pd.read_excel(POA_file, sheet_name = POA_sheet, index_col = None)
             os.chdir(eloqua_results_file_locations)
             main = pd.read_excel(Eloqua_file, sheet_name = POA_sheet, index_col = None)
-            combined = pd.merge(main, secondary, sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left') #define what you are combining on, and then make sure you are combining into file containing Eloqua results
+            combined = pd.merge(main, secondary['Contact: Primary Contact Email','Tax ID'], sort=False, left_on=['Email Address'], right_on=['Contact: Primary Contact Email'], how = 'left') #make sure you are keeping just TaxID
             os.chdir(combined_results_file_location)
             file_name = POA_file + ' + ' + POA_sheet + ' done by Python.xlsx'
             combined.to_excel(file_name, index=False)
@@ -107,7 +107,7 @@ def opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_
                 os.chdir(combined_results_file_location)
                 combined_results_file = pd.read_excel(combined_file, index_col = None)
                 opportunity_ID_file = pd.read_excel(opportunity_ID_file_location, index_col = None)  #it is set up for .xlsx
-                combined = pd.merge(combined_results_file, opportunity_ID_file, on = 'Tax ID', how = 'outer')  
+                combined = pd.merge(combined_results_file, opportunity_ID_file['Opportunity ID','Tax ID'], on = 'Tax ID', how = 'left') #set it to only keep the opportunity ID
                 file_name = combined_file
                 os.chdir(new_combined_file_with_opportunity_ID_directory)
                 combined.to_excel(file_name, index = False)
@@ -123,14 +123,12 @@ def mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory):
         for file in files:
             mail = outlook.CreateItem(0)    
             mail.To = 'isaama2@vsp.com'
-            mail.Subject = 'Perfect Pair Rebate List'
-            mail.Body = 'Hi Alex, \r\n\nHere is the perfect pair rebate list!\r\n\nCheers, \r\nIsaac'
-            attachment = r'\\ntsca126\PRmisc\Provider Operations and Analysis\Reporting & Analytics\Marketing\Sales\POA-1364 Perfect Pair Rebate\POA-1164 Development\python perfect pair.xlsx'
-            #attachment = directory + '\\' + file_name #will this work? putting the slash infront of this?
-            print('working correctly')
+            mail.Subject = 'Eloqua Results' + file
+            mail.Body = 'Hi, \r\n\nHere is the' + file + '\\r\n\nCheers, \r\nIsaac'
+            attachment = file
             mail.Attachments.Add(attachment)
             mail.Send()
             #clarify it worked
         print('Operation successful!')
 
-##mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory)
+mail_the_files_to_ops(new_combined_file_with_opportunity_ID_directory)
