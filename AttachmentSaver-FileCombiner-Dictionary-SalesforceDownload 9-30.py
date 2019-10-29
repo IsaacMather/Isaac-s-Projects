@@ -5,6 +5,14 @@
 #4. Set the eloqua_results_file_locations for the correct month
 #5. Set the POA_lists_file_location for the correct month
 
+#TODO
+#1. make the sheets combine themselves
+#2. make the file ly look for unopened messages from michael anderson
+#3. 
+
+
+
+
 #this library is to set the directory
 import os
 
