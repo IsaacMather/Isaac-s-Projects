@@ -60,7 +60,7 @@ def dictionary_creater(POA_Eloqua_Team_Dataframe_Location):
 eloqua_results_dictionary = dictionary_creater(POA_Eloqua_Team_Dataframe_Location)
 
 
-###function to find a filename and its corresponding key, then combine the file and its key
+###This function takes the dictionary that we just made, plus the marketing results files we got from Outlook, and uses the dictionary to combine our marketing results with the original lists we sent to marketing
 def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location):
     files = os.listdir(POA_lists_file_location)
     for POA_file in files:
@@ -85,7 +85,7 @@ def attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations
 attachment_combiner(eloqua_results_dictionary, eloqua_results_file_locations, POA_lists_file_location, combined_results_file_location)
 
 
-#This function takes the product of the previous function, and combined it with a reference file for opportunity ID's. The product of this function is to have email results data combined with TaxID and Opportunity ID. Now the Eloqua results data is ready for uploading. 
+#This function takes our marketing data + orginal list file, and combines it with a reference file for opportunity ID's. The product of this function is to have email results data combined with TaxID and Opportunity ID. Now the Eloqua results data is ready for uploading. 
 def opportunity_ID_combiner(opportunity_ID_file_location, combined_results_file_location, new_combined_file_with_opportunity_ID_directory):
     files = os.listdir(combined_results_file_location)
     for combined_file in files:
