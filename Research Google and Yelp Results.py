@@ -7,4 +7,11 @@
 ##
 ##Take a practice I know exists, use it as a test, have the program rip through the spreadsheet of addresses and return search results. 
 ##
-##Create a flow chart, and reconnect with Justin. 
+##Create a flow chart, and reconnect with Justin.
+
+##https://python-googlesearch.readthedocs.io/en/latest/
+##https://pypi.org/project/google/
+
+from googlesearch import search
+for url in search('"Breaking Code" WordPress blog', stop=20):
+    print(url)
