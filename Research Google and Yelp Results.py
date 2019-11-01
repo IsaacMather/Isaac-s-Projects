@@ -28,13 +28,13 @@ import os
 import pandas as pd
 import numpy as np
 
-file_location_of_list_of_practices = '' #need to add this practice file
+file_location_of_list_of_practices = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\Possibly Closed Locations List.xlsx' #need to add this practice file
 def search_for_web_results(file_location_of_list_of_practices):
     practices = pd.ExcelFile(file_location_of_list_of_practices)
     for index, row in practices.iterrows(): #don't use this, use https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas/55557758#55557758
-        for url in search(row[practice_name]+row[practice+address], stop=1): #google maps not google search
-            #here we set the open/closed variable result, to a row 
-
+        print(row['Common Account Name']+row['Physical Street']) #here we set the open/closed variable result, to a row 
+#for url in search(row['Common Account Name']+row['Physical Street'], pause = 2.0, stop=1): #google maps not google search
+        
 
 
 #search_for_web_results(file_location_of_list_of_practices)
