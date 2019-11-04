@@ -34,7 +34,7 @@ from openpyxl import load_workbook
 from googleplaces import GooglePlaces, types, lang
 
 file_location_of_list_of_practices = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\Possibly Closed Locations List.xlsx' #need to add this practice file
-YOUR_API_KEY = 'AIzaSyByMfz-rWKZ5qQBgpwIK0bgbaiu-kfrhI4'
+YOUR_API_KEY = 'AIzaSyCO_l9U4pSPjdkXvz0uY0GpRT2V6PjwPOg'
 def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
     practices = pd.read_excel(file_location_of_list_of_practices)
     #print(practices)
