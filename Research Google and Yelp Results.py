@@ -38,7 +38,7 @@ YOUR_API_KEY = 'AIzaSyCO_l9U4pSPjdkXvz0uY0GpRT2V6PjwPOg'
 def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
     practices = pd.read_excel(file_location_of_list_of_practices)
     #print(practices)
-    for index, row in practices.iterrows(): #don't use this, use https://stackoverflow.com/questions/16476924/how-to-iterate-over-rows-in-a-dataframe-in-pandas/55557758#55557758  
+    for index, row in practices.iterrows(): 
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
         practice_city = getattr(row, "Physical City")
