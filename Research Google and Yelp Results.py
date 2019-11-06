@@ -47,10 +47,18 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
         query_result = google_places.text_search(query = practice_name + practice_address)
         print(len(query_result.places))
         for place in query_result.places:
-            print (place.name)
-            print (place.place_id)
-            print('\n')
-
+            try:
+                place.get_details()
+                practices.iloc[index, 12] = place.name
+                practices.iloc[index, 13] = place.international_phone_number
+                practices.iloc[index, 14] = place.place_id
+                practices.iloc[index, 15] = place.url
+                practices.iloc[index, 16] = place.website
+                practices.iloc[index, 17] = place.permanently_closed
+            except:
+                continue
+    practices.to_excel(practices, index = False) 
+        
 ##      google maps api for python: https://developers.google.com/places/web-service/intro, https://developers.google.com/places/web-service/get-api-key, https://console.cloud.google.com/projectselector2/google/maps-apis/overview?pli=1&supportedpurview=project
 
 ##      https://stackoverflow.com/questions/50504897/google-places-api-in-python
