@@ -42,7 +42,6 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
         practice_city = getattr(row, "Physical City")
-        
         google_places = GooglePlaces(YOUR_API_KEY)
         query_result = google_places.text_search(query = practice_name + practice_address)
         print(len(query_result.places))
@@ -60,19 +59,6 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
     practices.to_excel(practices, index = False) 
         
 ##      google maps api for python: https://developers.google.com/places/web-service/intro, https://developers.google.com/places/web-service/get-api-key, https://console.cloud.google.com/projectselector2/google/maps-apis/overview?pli=1&supportedpurview=project
-
 ##      https://stackoverflow.com/questions/50504897/google-places-api-in-python
-
-
 ##        for url in search(practice_name + practice_address, pause = 2.0, stop = 1):
-##            print(url)    
-##        row = 1
-##        practice_name = practices.iloc[row,4]
-##        practice_address = practices.iloc[row,5]
-##        row + 1
-##            print(practice_name)
-##            print(practice_address)
-
-
 search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY)
-
