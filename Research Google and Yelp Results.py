@@ -10,10 +10,7 @@
 ##Create a flow chart, and reconnect with Justin.
 ##search google maps for the search result, and see if it is open or closed
 
-#1. iterate through the sheets, combining name and address into a text field that we search for. Return the top 5 search results for this thing. 
-
-
-
+#1. iterate through the sheets, combining name and address into a text field that we search for. Return the top 5 search results for this thing.
 
 ##https://python-googlesearch.readthedocs.io/en/latest/
 ##https://pypi.org/project/google/
@@ -25,7 +22,6 @@
 
 #google api key: AIzaSyByMfz-rWKZ5qQBgpwIK0bgbaiu-kfrhI4
 
-
 from googlesearch import search
 import os
 import pandas as pd
@@ -35,7 +31,9 @@ from googleplaces import GooglePlaces, types, lang
 
 file_location_of_list_of_practices = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\Possibly Closed Locations List.xlsx' #need to add this practice file
 YOUR_API_KEY = 'AIzaSyCO_l9U4pSPjdkXvz0uY0GpRT2V6PjwPOg'
-def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
+directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations'
+new_file_name = 'practice_info.xlsx'
+def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file):
     practices = pd.read_excel(file_location_of_list_of_practices)
     #print(practices)
     for index, row in practices.iterrows(): 
@@ -48,7 +46,8 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
         for place in query_result.places:
             try:
                 place.get_details()
-                practices.iloc[index, 12] = place.name
+                practices.iloc[index, 11] = place.name
+                practices.iloc[index, 12] = place.formatted_address
                 practices.iloc[index, 13] = place.international_phone_number
                 practices.iloc[index, 14] = place.place_id
                 practices.iloc[index, 15] = place.url
@@ -56,9 +55,10 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY):
                 practices.iloc[index, 17] = place.permanently_closed
             except:
                 continue
-    practices.to_excel(practices, index = False) 
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    practices.to_excel(new_file_name, index = False) 
         
 ##      google maps api for python: https://developers.google.com/places/web-service/intro, https://developers.google.com/places/web-service/get-api-key, https://console.cloud.google.com/projectselector2/google/maps-apis/overview?pli=1&supportedpurview=project
 ##      https://stackoverflow.com/questions/50504897/google-places-api-in-python
 ##        for url in search(practice_name + practice_address, pause = 2.0, stop = 1):
-search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY)
+search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
