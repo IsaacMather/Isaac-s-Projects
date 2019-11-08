@@ -22,22 +22,20 @@
 
 #google api key: AIzaSyByMfz-rWKZ5qQBgpwIK0bgbaiu-kfrhI4
 from __future__ import print_function
-
-from googlesearch import search
-import os
-import pandas as pd
-import numpy as np
-from openpyxl import load_workbook
-from googleplaces import GooglePlaces, types, lang
-
-
-
 import argparse
 import json
 import pprint
 import requests
 import sys
 import urllib
+
+#for querying google
+from googlesearch import search
+import os
+import pandas as pd
+import numpy as np
+from openpyxl import load_workbook
+from googleplaces import GooglePlaces, types, lang
 
 
 file_location_of_list_of_practices = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\Possibly Closed Locations List.xlsx' #need to add this practice file
@@ -148,14 +146,9 @@ def request(host, path, api_key, url_params=None):
     """
     url_params = url_params or {}
     url = '{0}{1}'.format(host, quote(path.encode('utf8')))
-    headers = {
-        'Authorization': 'Bearer %s' % api_key,
-    }
-
+    headers = {'Authorization': 'Bearer %s' % api_key,}
     print(u'Querying {0} ...'.format(url))
-
     response = requests.request('GET', url, headers=headers, params=url_params)
-
     return response.json()
 
 
@@ -165,48 +158,29 @@ def search(api_key, term, location):
         term (str): The search term passed to the API.
         location (str): The search location passed to the API.
     Returns:
-        dict: The JSON response from the request.
-    """
-
-    url_params = {
-        'term': term.replace(' ', '+'),
-        'location': location.replace(' ', '+'),
-        'limit': SEARCH_LIMIT
-    }
+        dict: The JSON response from the request."""
+    url_params = {'term': term.replace(' ', '+'), 'location': location.replace(' ', '+'), 'limit': SEARCH_LIMIT}
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
-
 
 def get_business(api_key, business_id):
     """Query the Business API by a business ID.
-    Args:
-        business_id (str): The ID of the business to query.
-    Returns:
-        dict: The JSON response from the request.
-    """
+    Args: business_id (str): The ID of the business to query.
+    Returns: dict: The JSON response from the request."""
     business_path = BUSINESS_PATH + business_id
-
     return request(API_HOST, business_path, api_key)
-
 
 def query_api(term, location):
     """Queries the API by the input values from the user.
-    Args:
-        term (str): The search term to query.
-        location (str): The location of the business to query.
-    """
+    Args: term (str): The search term to query.
+    location (str): The location of the business to query."""
     response = search(API_KEY, term, location)
-
     businesses = response.get('businesses')
-
     if not businesses:
         print(u'No businesses for {0} in {1} found.'.format(term, location))
         return
-
     business_id = businesses[0]['id']
-
-    print(u'{0} businesses found, querying business info ' \
-        'for the top result "{1}" ...'.format(
-            len(businesses), business_id))
+    
+    print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
 
     print(u'Result for business "{0}" found:'.format(business_id))
@@ -215,26 +189,15 @@ def query_api(term, location):
 
 def main():
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM,
-                        type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--location', dest='location',
-                        default=DEFAULT_LOCATION, type=str,
-                        help='Search location (default: %(default)s)')
-
+    parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM, type=str, help='Search term (default: %(default)s)')
+    parser.add_argument('-l', '--location', dest='location', default=DEFAULT_LOCATION, type=str, help='Search location (default: %(default)s)')
     input_values = parser.parse_args()
 
     try:
         query_api(input_values.term, input_values.location)
     except HTTPError as error:
         sys.exit(
-            'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
-                error.code,
-                error.url,
-                error.read(),
-            )
-        )
-
+            'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
 
 if __name__ == '__main__':
     main()
