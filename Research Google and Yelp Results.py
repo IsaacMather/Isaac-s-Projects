@@ -63,4 +63,11 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
 ##      google maps api for python: https://developers.google.com/places/web-service/intro, https://developers.google.com/places/web-service/get-api-key, https://console.cloud.google.com/projectselector2/google/maps-apis/overview?pli=1&supportedpurview=project
 ##      https://stackoverflow.com/questions/50504897/google-places-api-in-python
 ##        for url in search(practice_name + practice_address, pause = 2.0, stop = 1):
+
+
+#https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
+
+
+
+
 search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
