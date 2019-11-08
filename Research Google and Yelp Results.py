@@ -40,8 +40,10 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
         practice_city = getattr(row, "Physical City")
+        practice_state = getattr(row, "Physical State/Province")
+        practice_zip = str(getattr(row, "Physical Zip/Postal Code"))
         google_places = GooglePlaces(YOUR_API_KEY)
-        query_result = google_places.text_search(query = practice_name + practice_address)
+        query_result = google_places.text_search(query = practice_name + ' ' + practice_address + ' ' + practice_city + ' ' + practice_state + ' ' + practice_zip)
         print(len(query_result.places))
         for place in query_result.places:
             try:
