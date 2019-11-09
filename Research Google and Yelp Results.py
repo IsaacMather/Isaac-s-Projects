@@ -1,3 +1,12 @@
+#TODO
+#1. Get practices spreadsheet in main
+#2. get dynamic practice name and address insertion into main
+#3. get the results from the Yelp into the practice info spreadsheet
+
+
+
+
+
 ##What's the challenge:
 ##	Ensuring the provider database is up to date and accurate
 ##	
@@ -131,7 +140,6 @@ DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
 SEARCH_LIMIT = 3
 
-
 def request(host, path, api_key, url_params=None):
     """Given your API_KEY, send a GET request to the API.
     Args:
@@ -151,6 +159,12 @@ def request(host, path, api_key, url_params=None):
     response = requests.request('GET', url, headers=headers, params=url_params)
     return response.json()
 
+def get_business(api_key, business_id):
+    """Query the Business API by a business ID.
+    Args: business_id (str): The ID of the business to query.
+    Returns: dict: The JSON response from the request."""
+    business_path = BUSINESS_PATH + business_id
+    return request(API_HOST, business_path, api_key)
 
 def search(api_key, term, location):
     """Query the Search API by a search term and location.
@@ -161,13 +175,6 @@ def search(api_key, term, location):
         dict: The JSON response from the request."""
     url_params = {'term': term.replace(' ', '+'), 'location': location.replace(' ', '+'), 'limit': SEARCH_LIMIT}
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
-
-def get_business(api_key, business_id):
-    """Query the Business API by a business ID.
-    Args: business_id (str): The ID of the business to query.
-    Returns: dict: The JSON response from the request."""
-    business_path = BUSINESS_PATH + business_id
-    return request(API_HOST, business_path, api_key)
 
 def query_api(term, location):
     """Queries the API by the input values from the user.
@@ -186,17 +193,22 @@ def query_api(term, location):
     print(u'Result for business "{0}" found:'.format(business_id))
     pprint.pprint(response, indent=2)
 
-
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM, type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--location', dest='location', default=DEFAULT_LOCATION, type=str, help='Search location (default: %(default)s)')
-    input_values = parser.parse_args()
+    for index, row in practices.iterrows(): #get practices spreadsheet in here
+        practice_name = getattr(row, "Common Account Name")
+        practice_address = getattr(row, "Physical Street")
+        practice_city = getattr(row, "Physical City")
+        practice_state = getattr(row, "Physical State/Province")
+        practice_zip = str(getattr(row, "Physical Zip/Postal Code"))
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-q', '--term', dest='term', default = practice_name, type=str, help='Search term (default: %(default)s)')
+        parser.add_argument('-l', '--location', dest='location', default = practice_address + ' ' + practice_city + ' ' + practice_state + ' ' + practice_zip, type=str, help='Search location (default: %(default)s)')
+        input_values = parser.parse_args()
 
-    try:
-        query_api(input_values.term, input_values.location)
-    except HTTPError as error:
-        sys.exit(
+        try:
+            query_api(input_values.term, input_values.location)
+        except HTTPError as error:
+            sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
 
 if __name__ == '__main__':
