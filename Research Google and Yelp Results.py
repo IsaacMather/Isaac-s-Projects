@@ -1,6 +1,6 @@
 #TODO
-#1. Get practices spreadsheet in main
-#2. get dynamic practice name and address insertion into main
+#1. Get practices spreadsheet in main - done
+#2. get dynamic practice name and address insertion into main - done
 #3. get the results from the Yelp into the practice info spreadsheet
 
 
@@ -50,7 +50,7 @@ from googleplaces import GooglePlaces, types, lang
 file_location_of_list_of_practices = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\Possibly Closed Locations List.xlsx' #need to add this practice file
 YOUR_API_KEY = 'AIzaSyCO_l9U4pSPjdkXvz0uY0GpRT2V6PjwPOg'
 directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations'
-new_file_name = 'practice_info.xlsx'
+new_file_name = 'google_places_results.xlsx'
 def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file):
     practices = pd.read_excel(file_location_of_list_of_practices)
     #print(practices)
@@ -85,7 +85,7 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
 
 #https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
 
-#search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
+search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
 
 
 
@@ -135,10 +135,9 @@ SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 
 
-# Defaults for our simple example.
-DEFAULT_TERM = 'dinner'
-DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 3
+#google_places_results = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\google_places_results.xlsx'
+
+
 
 def request(host, path, api_key, url_params=None):
     """Given your API_KEY, send a GET request to the API.
@@ -193,7 +192,8 @@ def query_api(term, location):
     print(u'Result for business "{0}" found:'.format(business_id))
     pprint.pprint(response, indent=2)
 
-def main():
+def main(file_location_of_list_of_practices):
+    practices = pd.read_excel(file_location_of_list_of_practices)
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
@@ -211,7 +211,7 @@ def main():
             sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+    main(file_location_of_list_of_practices)
 
 
