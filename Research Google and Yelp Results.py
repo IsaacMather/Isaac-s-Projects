@@ -1,7 +1,6 @@
 #TODO
-#1. Get practices spreadsheet in main - done
-#2. get dynamic practice name and address insertion into main - done
 #3. get the results from the Yelp into the practice info spreadsheet
+#4. get the loop to only save the info to the file once, not each time a new practice is called. roughly line 194
 
 
 
@@ -135,8 +134,8 @@ SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 
 
-#google_places_results = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\google_places_results.xlsx'
-
+google_places_results = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\google_places_results.xlsx'
+yelp_and_google_results = 'yelp_and_google_results_file.xlsx'
 
 
 def request(host, path, api_key, url_params=None):
@@ -175,7 +174,7 @@ def search(api_key, term, location):
     url_params = {'term': term.replace(' ', '+'), 'location': location.replace(' ', '+'), 'limit': SEARCH_LIMIT}
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
-def query_api(term, location):
+def query_api(term, location, yelp_and_google_results):
     """Queries the API by the input values from the user.
     Args: term (str): The search term to query.
     location (str): The location of the business to query."""
@@ -189,11 +188,26 @@ def query_api(term, location):
     print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
 
-    print(u'Result for business "{0}" found:'.format(business_id))
-    pprint.pprint(response, indent=2)
+            
+            try:
+                place.get_details()
+                practices.iloc[index, 18] = response[name]
+                practices.iloc[index, 19] = response[display_phone]
+                practices.iloc[index, 20] = response[is_closed]
+                practices.iloc[index, 21] = response[location]
+                practices.iloc[index, 22] = response[display_phone]
+                
+            except:
+                continue
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    practices.to_excel(yelp_and_google_results, index = False)
 
-def main(file_location_of_list_of_practices):
-    practices = pd.read_excel(file_location_of_list_of_practices)
+    
+    #print(u'Result for business "{0}" found:'.format(business_id))
+    #pprint.pprint(response, indent=2)
+
+def main(google_places_results):
+    practices = pd.read_excel(google_places_results)
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
@@ -212,6 +226,6 @@ def main(file_location_of_list_of_practices):
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
 
 #if __name__ == '__main__':
-    main(file_location_of_list_of_practices)
+    main(google_places_results)
 
 
