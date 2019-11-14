@@ -1,7 +1,7 @@
 #TODO
 #3. get the results from the Yelp into the practice info spreadsheet
 #4. get the loop to only save the info to the file once, not each time a new practice is called. roughly line 194
-
+#5. check what is going into the query api and main functions, need to clean up which files are being used where
 
 
 
@@ -84,7 +84,7 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
 
 #https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
 
-search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
+#search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
 
 
 
@@ -187,18 +187,17 @@ def query_api(term, location, yelp_and_google_results):
     
     print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
-
-            
-            try:
-                place.get_details()
-                practices.iloc[index, 18] = response[name]
-                practices.iloc[index, 19] = response[display_phone]
-                practices.iloc[index, 20] = response[is_closed]
-                practices.iloc[index, 21] = response[location]
-                practices.iloc[index, 22] = response[display_phone]
-                
-            except:
-                continue
+    place.get_details()
+##    index = 0
+##    while index < 20 
+##        practices = pd.read_excel(google_places_results)
+##        practices.iloc[index, 18] = response[name]
+##        practices.iloc[index, 19] = response[display_phone]
+##        practices.iloc[index, 20] = response[is_closed]
+##        practices.iloc[index, 21] = response[location]
+##        practices.iloc[index, 22] = response[display_phone]        
+##        index =+ 1 
+    
     os.chdir(directory_where_you_want_to_save_the_new_file)
     practices.to_excel(yelp_and_google_results, index = False)
 
@@ -225,7 +224,7 @@ def main(google_places_results):
             sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
     main(google_places_results)
 
 
