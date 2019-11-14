@@ -132,7 +132,7 @@ API_KEY= 'pmOEz334MEOnzqavqD7HRoUiK9yu9bSpIwEnJs7RQ0rL9Z6CnAi-jLMXXF2cRUPITLSoFm
 API_HOST = 'https://api.yelp.com'
 SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
-
+SEARCH_LIMIT = 3
 
 google_places_results = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Investigating Possibly Closed Locations\google_places_results.xlsx'
 yelp_and_google_results = 'yelp_and_google_results_file.xlsx'
@@ -174,7 +174,8 @@ def search(api_key, term, location):
     url_params = {'term': term.replace(' ', '+'), 'location': location.replace(' ', '+'), 'limit': SEARCH_LIMIT}
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
-def query_api(term, location, yelp_and_google_results):
+
+def query_api(term, location):
     """Queries the API by the input values from the user.
     Args: term (str): The search term to query.
     location (str): The location of the business to query."""
@@ -187,25 +188,13 @@ def query_api(term, location, yelp_and_google_results):
     
     print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
-    place.get_details()
-##    index = 0
-##    while index < 20 
-##        practices = pd.read_excel(google_places_results)
-##        practices.iloc[index, 18] = response[name]
-##        practices.iloc[index, 19] = response[display_phone]
-##        practices.iloc[index, 20] = response[is_closed]
-##        practices.iloc[index, 21] = response[location]
-##        practices.iloc[index, 22] = response[display_phone]        
-##        index =+ 1 
-    
-    os.chdir(directory_where_you_want_to_save_the_new_file)
-    practices.to_excel(yelp_and_google_results, index = False)
+    return response
 
     
     #print(u'Result for business "{0}" found:'.format(business_id))
     #pprint.pprint(response, indent=2)
 
-def main(google_places_results):
+def main(google_places_results, yelp_and_google_results):
     practices = pd.read_excel(google_places_results)
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
@@ -219,12 +208,22 @@ def main(google_places_results):
         input_values = parser.parse_args()
 
         try:
-            query_api(input_values.term, input_values.location)
+            response = query_api(input_values.term, input_values.location)
+            print(response)
+##            practices = pd.read_excel(google_places_results)
+##            practices.iloc[index, 18] = response['name']
+##            practices.iloc[index, 19] = response['display_phone']
+##            practices.iloc[index, 20] = response['is_closed']
+##            practices.iloc[index, 21] = response['location']
+##            practices.iloc[index, 22] = response['display_phone']        
+
         except HTTPError as error:
             sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    practices.to_excel(yelp_and_google_results, index = False)        
 
 if __name__ == '__main__':
-    main(google_places_results)
+    main(google_places_results, yelp_and_google_results)
 
 
