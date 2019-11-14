@@ -153,7 +153,7 @@ def request(host, path, api_key, url_params=None):
     url_params = url_params or {}
     url = '{0}{1}'.format(host, quote(path.encode('utf8')))
     headers = {'Authorization': 'Bearer %s' % api_key,}
-    print(u'Querying {0} ...'.format(url))
+##    print(u'Querying {0} ...'.format(url))
     response = requests.request('GET', url, headers=headers, params=url_params)
     return response.json()
 
@@ -175,27 +175,39 @@ def search(api_key, term, location):
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
 
-def query_api(term, location):
+def query_api(term, location, index):
     """Queries the API by the input values from the user.
     Args: term (str): The search term to query.
     location (str): The location of the business to query."""
     response = search(API_KEY, term, location)
     businesses = response.get('businesses')
     if not businesses:
-        print(u'No businesses for {0} in {1} found.'.format(term, location))
+##        print(u'No businesses for {0} in {1} found.'.format(term, location))
         return
     business_id = businesses[0]['id']
     
-    print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
+##    print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
-    return response
+##        print('name' in response)
+    practices = pd.read_excel(google_places_results)
+    practices.iloc[index, 18] = response['name']
+    practices.iloc[index, 19] = response['display_phone']
+    practices.iloc[index, 20] = response['is_closed']
+    practices.iloc[index, 21] = response['location']
+    practices.iloc[index, 22] = response['display_phone']        
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    practices.to_excel(yelp_and_google_results, index = False)    
 
-    
-    #print(u'Result for business "{0}" found:'.format(business_id))
-    #pprint.pprint(response, indent=2)
+##    print('name' in response)
+##    return response
+
+##    print(type(response))
+##    print(u'Result for business "{0}" found:'.format(business_id))
+##    pprint.pprint(response, indent=2)
 
 def main(google_places_results, yelp_and_google_results):
     practices = pd.read_excel(google_places_results)
+    index = 0
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
@@ -206,22 +218,14 @@ def main(google_places_results, yelp_and_google_results):
         parser.add_argument('-q', '--term', dest='term', default = practice_name, type=str, help='Search term (default: %(default)s)')
         parser.add_argument('-l', '--location', dest='location', default = practice_address + ' ' + practice_city + ' ' + practice_state + ' ' + practice_zip, type=str, help='Search location (default: %(default)s)')
         input_values = parser.parse_args()
-
+        
         try:
-            response = query_api(input_values.term, input_values.location)
-            print(response)
-##            practices = pd.read_excel(google_places_results)
-##            practices.iloc[index, 18] = response['name']
-##            practices.iloc[index, 19] = response['display_phone']
-##            practices.iloc[index, 20] = response['is_closed']
-##            practices.iloc[index, 21] = response['location']
-##            practices.iloc[index, 22] = response['display_phone']        
+            query_api(input_values.term, input_values.location, index, yelp_and_google_results)
 
         except HTTPError as error:
             sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
-    os.chdir(directory_where_you_want_to_save_the_new_file)
-    practices.to_excel(yelp_and_google_results, index = False)        
+    
 
 if __name__ == '__main__':
     main(google_places_results, yelp_and_google_results)
