@@ -8,3 +8,5 @@
 
 #find a way to isolate the locations that are coming soon, and notate that
 #potentially "opening"
+
+#https://realpython.com/python-web-scraping-practical-introduction/

@@ -84,7 +84,7 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
 
 #https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
 
-##search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
+search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
 
 
 
@@ -229,7 +229,7 @@ def main(google_places_results, yelp_and_google_results):
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
     
 
-if __name__ == '__main__':
+##if __name__ == '__main__':
     main(google_places_results, yelp_and_google_results)
 
 
