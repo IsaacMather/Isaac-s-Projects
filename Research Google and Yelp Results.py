@@ -84,7 +84,7 @@ def search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, dir
 
 #https://github.com/Yelp/yelp-fusion/blob/master/fusion/python/sample.py
 
-#search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
+##search_for_web_results(file_location_of_list_of_practices, YOUR_API_KEY, directory_where_you_want_to_save_the_new_file)
 
 
 
@@ -188,12 +188,14 @@ def query_api(term, location, index):
     
 ##    print(u'{0} businesses found, querying business info for the top result "{1}" ...'.format(len(businesses), business_id))
     response = get_business(API_KEY, business_id)
-##        print('name' in response)
+    print(u'Result for business "{0}" found:'.format(business_id))
+##    pprint.pprint(response, indent=2)
+##    print('name' in response)
     practices = pd.read_excel(google_places_results)
     practices.iloc[index, 18] = response['name']
     practices.iloc[index, 19] = response['display_phone']
     practices.iloc[index, 20] = response['is_closed']
-    practices.iloc[index, 21] = response['location']
+##    practices.iloc[index, 21] = response['location']
     practices.iloc[index, 22] = response['display_phone']        
     os.chdir(directory_where_you_want_to_save_the_new_file)
     practices.to_excel(yelp_and_google_results, index = False)    
@@ -202,12 +204,11 @@ def query_api(term, location, index):
 ##    return response
 
 ##    print(type(response))
-##    print(u'Result for business "{0}" found:'.format(business_id))
-##    pprint.pprint(response, indent=2)
+
 
 def main(google_places_results, yelp_and_google_results):
     practices = pd.read_excel(google_places_results)
-    index = 0
+    index = 1
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
@@ -220,8 +221,9 @@ def main(google_places_results, yelp_and_google_results):
         input_values = parser.parse_args()
         
         try:
-            query_api(input_values.term, input_values.location, index, yelp_and_google_results)
-
+            query_api(input_values.term, input_values.location, index)
+            index = index + 1
+            
         except HTTPError as error:
             sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(error.code, error.url, error.read(),))
