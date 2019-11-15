@@ -208,7 +208,7 @@ def query_api(term, location, index):
 
 def main(google_places_results, yelp_and_google_results):
     practices = pd.read_excel(google_places_results)
-    index = 1
+    index = 0
     for index, row in practices.iterrows(): #get practices spreadsheet in here
         practice_name = getattr(row, "Common Account Name")
         practice_address = getattr(row, "Physical Street")
@@ -221,8 +221,8 @@ def main(google_places_results, yelp_and_google_results):
         input_values = parser.parse_args()
         
         try:
-            query_api(input_values.term, input_values.location, index)
             index = index + 1
+            query_api(input_values.term, input_values.location, index)
             
         except HTTPError as error:
             sys.exit(
