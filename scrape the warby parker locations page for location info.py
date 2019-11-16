@@ -11,6 +11,10 @@
 
 #https://realpython.com/python-web-scraping-practical-introduction/
 
+# TODO
+#1. filter my URL results so only specific URL's are returned
+
+
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
@@ -56,9 +60,14 @@ def log_error(e):
 
 raw_html = simple_get('https://www.warbyparker.com/retail')
 html = BeautifulSoup(raw_html, 'html.parser')
+for elem in html.find_all('a', href=re.compile('retail')):
+    print(elem['href'])
 
-for i, url in enumerate(html.select('a')):
-    print(url)
+
+
+##
+##for i, url in enumerate(html.select('a')):
+##    print(url)
     #more_raw_html = simple_get(
 ##for h1, p in zip(html.select('h1'), html.select('p')):
 ##    print(h1.text, p.text)
