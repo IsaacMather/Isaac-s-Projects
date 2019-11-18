@@ -60,18 +60,21 @@ def log_error(e):
     print(e)
 
 excel_sheet = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations'
-raw_html = simple_get('https://www.warbyparker.com/retail')
-html = BeautifulSoup(raw_html, 'html.parser')
 directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations'
-
 ##locations = pd.read_excel(excel_sheet)
-for elem in html.find_all('a', href=re.compile('retail')):
-    address_url = 'https://www.warbyparker.com' + elem['href']
-    raw_address_html = simple_get(address_url)
-    cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
-    for i, elem in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))):
-        print(elem.text)
-        
+
+def pull_warby_parker_locations():
+    raw_html = simple_get('https://www.warbyparker.com/retail')
+    html = BeautifulSoup(raw_html, 'html.parser')
+    for elem in html.find_all('a', href=re.compile('retail')):
+        address_url = 'https://www.warbyparker.com' + elem['href']
+        raw_address_html = simple_get(address_url)
+        cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
+        for i, elem in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))):
+            print(elem.text)
+
+pull_warby_parker_locations()
+
 ##        locations.iloc[i,1] = elem['text']
 ##
 ##os.chdir(directory_where_you_want_to_save_the_new_file)
