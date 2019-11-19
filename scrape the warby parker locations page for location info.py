@@ -67,6 +67,7 @@ def log_error(e):
 #eyemart
 #standon optical
 #cohens fashion
+##add "coming soon" option
 excel_sheet = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations\Warby Parker.xlsx'
 directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations'
 new_file_name = "warby_parker_locations.xlsx"
