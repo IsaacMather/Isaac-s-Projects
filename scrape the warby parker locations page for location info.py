@@ -69,20 +69,18 @@ new_file_name = "warby_parker_locations.xlsx"
 def pull_warby_parker_locations():
     print(new_file_name)
     locations_list = []
-    locations = pd.read_excel(excel_sheet)
     raw_html = simple_get('https://www.warbyparker.com/retail')
     html = BeautifulSoup(raw_html, 'html.parser')
-    for i, elem in enumerate(html.find_all('a', href=re.compile('retail'))):
+    for elem in html.find_all('a', href=re.compile('retail')):
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
         cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
-        for i, elem in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))):
+        for elem in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
             locations_list.append(elem.text)
-            print(locations_list)
-        
-##      locations.iloc[i,0] = practice_address
-##      os.chdir(directory_where_you_want_to_save_the_new_file)
-      locations.to_excel(new_file_name, index = False) 
+            print(elem.text)        
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    df = pd.DataFrame({'Warby Parker Locations': locations_list})
+    df.to_excel(new_file_name, index = False) 
 
 pull_warby_parker_locations()
 
