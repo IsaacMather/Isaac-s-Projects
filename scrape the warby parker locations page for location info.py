@@ -60,23 +60,29 @@ def log_error(e):
     """
     print(e)
 
+#answers https://stackoverflow.com/questions/37009287/using-pandas-append-within-for-loop
+#https://stackoverflow.com/questions/29110820/how-to-scrape-between-span-tags-using-beautifulsoup
+
 excel_sheet = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations\Warby Parker.xlsx'
 directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations'
-
+new_file_name = "warby_parker_locations.xlsx"
 def pull_warby_parker_locations():
+    print(new_file_name)
+    locations_list = []
     locations = pd.read_excel(excel_sheet)
     raw_html = simple_get('https://www.warbyparker.com/retail')
     html = BeautifulSoup(raw_html, 'html.parser')
-    for elem in html.find_all('a', href=re.compile('retail')):
+    for i, elem in enumerate(html.find_all('a', href=re.compile('retail'))):
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
         cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
         for i, elem in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))):
-            print(elem.text)
-            b = i + 1
-            locations.iloc[b,1] = elem.text
-    os.chdir(directory_where_you_want_to_save_the_new_file)
-    locations.to_excel(new_file_name, index = False) 
+            locations_list.append(elem.text)
+            print(locations_list)
+        
+##      locations.iloc[i,0] = practice_address
+##      os.chdir(directory_where_you_want_to_save_the_new_file)
+      locations.to_excel(new_file_name, index = False) 
 
 pull_warby_parker_locations()
 
