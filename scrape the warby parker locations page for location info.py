@@ -80,8 +80,8 @@ def pull_warby_parker_locations():
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
         cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
-##        for elem in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
-        for elem in cleaned_raw_address_html.find_all('span'):
+        for elem in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
+##        for elem in cleaned_raw_address_html.find_all('span'):
             locations_list.append(elem.text)
             print(elem.text)        
     os.chdir(directory_where_you_want_to_save_the_new_file)
