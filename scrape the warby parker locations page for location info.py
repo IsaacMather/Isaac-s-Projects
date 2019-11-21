@@ -73,20 +73,27 @@ directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqu
 new_file_name = "warby_parker_locations.xlsx"
 def pull_warby_parker_locations():
     print(new_file_name)
-    locations_list = []
+    address_list = []
+    city_state_zip_list = []
     raw_html = simple_get('https://www.warbyparker.com/retail')
     html = BeautifulSoup(raw_html, 'html.parser')
     for elem in html.find_all('a', href=re.compile('retail')):
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
         cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
-        for elem in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
+        for hyperlink in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
 ##        for elem in cleaned_raw_address_html.find_all('span'):
-            locations_list.append(elem.text)
-            print(elem.text)        
+            for i, span in enumerate(hyperlink.find_all('span')):
+                if i == 0:
+                    address_list.append(span.text)
+                    print(span.text)
+                elif i == 1:
+                    city_state_zip_list.append(span.text)
+                    print(span.text)
     os.chdir(directory_where_you_want_to_save_the_new_file)
-    df = pd.DataFrame({'Warby Parker Locations': locations_list})
-    df.to_excel(new_file_name, index = False) 
+    dictionary = {'Warby Parker Address': address_list,'Warby Parker City/State/Zip': city_state_zip_list}
+    df = pd.DataFrame(dictionary)
+    df.to_excel(new_file_name, index = False)
 
 pull_warby_parker_locations()
 
