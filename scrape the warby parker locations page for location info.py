@@ -18,7 +18,7 @@
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
 import os
 import re
 import urllib
@@ -65,8 +65,8 @@ def log_error(e):
 
 
 #eyemart
-#standon optical
-#cohens fashion
+#standon optical https://www.stantonoptical.com/locations/
+#cohens fashion https://www.cohensfashionoptical.com/all-locations/
 ##add "coming soon" option
 excel_sheet = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations\Warby Parker.xlsx'
 directory_where_you_want_to_save_the_new_file = r'C:\Users\isaama2\Desktop\Eloqua Data Combiner Files\Warby Parker Locations'
@@ -95,8 +95,24 @@ def pull_warby_parker_locations():
     df = pd.DataFrame(dictionary)
     df.to_excel(new_file_name, index = False)
 
-pull_warby_parker_locations()
+#pull_warby_parker_locations()
 
+
+def stanton_optical_locations():
+    raw_html = simple_get('https://www.stantonoptical.com/locations/')
+    html = BeautifulSoup(raw_html,'html.parser')
+    for element in html.find_all('br'):
+        print(previousSibling.text)
+        next_s = element.nextSibling
+##        print(next_s)
+        if not (next_s and isinstance(next_s,NavigableString)):
+            continue
+        next2_s = next_s.nextSibling
+        if next2_s and isinstance(next2_s,Tag) and next2_s.name == 'br':
+            text = str(next_s).strip()
+            if text:
+                print("Found:", next_s)
+stanton_optical_locations()
 
 ##
 ##for i, url in enumerate(html.select('a')):
