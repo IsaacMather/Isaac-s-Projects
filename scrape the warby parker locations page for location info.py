@@ -97,14 +97,14 @@ def pull_warby_parker_locations():
 
 #pull_warby_parker_locations()
 
+#extracting text between an element https://stackoverflow.com/questions/16835449/python-beautifulsoup-extract-text-between-element
 
 def stanton_optical_locations():
     raw_html = simple_get('https://www.stantonoptical.com/locations/')
     html = BeautifulSoup(raw_html,'html.parser')
-    for element in html.find_all('br'):
-        print(previousSibling.text)
+    for element in html.find_all('p'):
+##        print(previousSibling.text)
         next_s = element.nextSibling
-##        print(next_s)
         if not (next_s and isinstance(next_s,NavigableString)):
             continue
         next2_s = next_s.nextSibling
@@ -112,6 +112,7 @@ def stanton_optical_locations():
             text = str(next_s).strip()
             if text:
                 print("Found:", next_s)
+
 stanton_optical_locations()
 
 ##
