@@ -107,18 +107,21 @@ def stanton_optical_locations():
     for ptag in html.find_all('p'):
       for content in ptag.contents:
           if content.string is not None:
-              for i, span in enumerate(content.string):
-                  if i == 0:
-                      continue
-                  elif i == 1:
-                      address_list.append(content.string)
-                      print(content.string)
-                  elif i == 2:
-                      city_state_zip_list.append(content.string)
-                  elif i > 2:
-                      continue
+              print(content.string)
+              address_list.append(content.string)
+##              for i, content in enumerate(content.string):
+##                  if i == 0:
+##                      continue
+##                  elif i == 1:
+##                      address_list.append(content)
+##                      print(content)
+##                  elif i == 2:
+##                      city_state_zip_list.append(content)
+##                      print(content)
+##                  elif i > 2:
+##                      continue
     os.chdir(directory_where_you_want_to_save_the_new_file)
-    dictionary = {'Stanton Optical Address': address_list,'Stanton Optical City/State/Zip': city_state_zip_list}
+    dictionary = {'Stanton Optical Address': address_list}#,'Stanton Optical City/State/Zip': city_state_zip_list}
     df = pd.DataFrame(dictionary)
     df.to_excel(new_file_name, index = False)                    
 ##          print(ptag.contents)
