@@ -102,16 +102,34 @@ def pull_warby_parker_locations():
 def stanton_optical_locations():
     raw_html = simple_get('https://www.stantonoptical.com/locations/')
     html = BeautifulSoup(raw_html,'html.parser')
-    for element in html.find_all('p'):
-##        print(previousSibling.text)
-        next_s = element.nextSibling
-        if not (next_s and isinstance(next_s,NavigableString)):
-            continue
-        next2_s = next_s.nextSibling
-        if next2_s and isinstance(next2_s,Tag) and next2_s.name == 'br':
-            text = str(next_s).strip()
-            if text:
-                print("Found:", next_s)
+    address_list = []
+    city_state_zip_list = []
+    for ptag in html.find_all('p'):
+      for content in ptag.contents:
+          if content.string is not None:
+              for i, span in enumerate(content.string):
+                  if i == 0:
+                      continue
+                  elif i == 1:
+                      address_list.append(content.string)
+                      print(content.string)
+                  elif i == 2:
+                      city_state_zip_list.append(content.string)
+                  elif i > 2:
+                      continue
+    os.chdir(directory_where_you_want_to_save_the_new_file)
+    dictionary = {'Stanton Optical Address': address_list,'Stanton Optical City/State/Zip': city_state_zip_list}
+    df = pd.DataFrame(dictionary)
+    df.to_excel(new_file_name, index = False)                    
+##          print(ptag.contents)
+##        next_s = element.nextSibling
+##        if not (next_s and isinstance(next_s,NavigableString)):
+##            continue
+##        next2_s = next_s.nextSibling
+##        if next2_s and isinstance(next2_s,Tag) and next2_s.name == 'br':
+##            text = str(next_s).strip()
+##            if text:
+##                print("Found:", next_s)
 
 stanton_optical_locations()
 
