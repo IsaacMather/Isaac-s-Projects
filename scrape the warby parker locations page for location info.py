@@ -23,6 +23,7 @@ import os
 import re
 import urllib
 import pandas as pd
+import time
 
 def simple_get(url):
     """
@@ -102,27 +103,28 @@ def pull_warby_parker_locations():
 def stanton_optical_locations():
     raw_html = simple_get('https://www.stantonoptical.com/locations/')
     html = BeautifulSoup(raw_html,'html.parser')
+    state_list = []
     address_list = []
     city_state_zip_list = []
     for ptag in html.find_all('p'):
-      for content in ptag.contents:
+      for i, content in enumerate(ptag.contents):
           if content.string is not None:
-              print(content.string)
-              address_list.append(content.string)
-##              for i, content in enumerate(content.string):
-##                  if i == 0:
-##                      continue
-##                  elif i == 1:
-##                      address_list.append(content)
-##                      print(content)
-##                  elif i == 2:
-##                      city_state_zip_list.append(content)
-##                      print(content)
-##                  elif i > 2:
-##                      continue
+              if i == 0:
+                  state_list.append(content.string)
+              elif i == 1:
+                  address_list.append(content.string)
+                  print(content)
+              elif i == 3:
+                  city_state_zip_list.append(content.string)
+                  print(content)
+              elif i > 3:
+                  continue
     os.chdir(directory_where_you_want_to_save_the_new_file)
-    dictionary = {'Stanton Optical Address': address_list}#,'Stanton Optical City/State/Zip': city_state_zip_list}
-    df = pd.DataFrame(dictionary)
+    address = pd.series(address_list, name = 'Addresses')
+    city = pd.series(city_state_zip_list, name = 'City/State/Zip')
+    df = pd.concat([address,city],axis = 1)
+##    dictionary = {'Stanton Optical Address':address_list,'Stanton Optical City/State/Zip': city_state_zip_list}
+##    df = pd.DataFrame.from_dict(dictionary)
     df.to_excel(new_file_name, index = False)                    
 ##          print(ptag.contents)
 ##        next_s = element.nextSibling
