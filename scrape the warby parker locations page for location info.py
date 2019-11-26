@@ -96,10 +96,10 @@ def pull_warby_parker_locations():
     df = pd.DataFrame(dictionary)
     df.to_excel(new_file_name, index = False)
 
-#pull_warby_parker_locations()
+pull_warby_parker_locations()
 
 #extracting text between an element https://stackoverflow.com/questions/16835449/python-beautifulsoup-extract-text-between-element
-
+stanton_file_name = "stanton_optical_locations.xlsx"
 def stanton_optical_locations():
     raw_html = simple_get('https://www.stantonoptical.com/locations/')
     html = BeautifulSoup(raw_html,'html.parser')
@@ -109,23 +109,25 @@ def stanton_optical_locations():
     for ptag in html.find_all('p'):
       for i, content in enumerate(ptag.contents):
           if content.string is not None:
-              if i == 0:
-                  state_list.append(content.string)
-              elif i == 1:
-                  address_list.append(content.string)
-                  print(content)
-              elif i == 3:
-                  city_state_zip_list.append(content.string)
-                  print(content)
-              elif i > 3:
-                  continue
+              if content.string is not None: #filter out the spurious results
+                  if i == 0:
+                      state_list.append(content.string)
+                  elif i == 1:
+                      address_list.append(content.string)
+                      print(content)
+                  elif i == 3:
+                      city_state_zip_list.append(content.string)
+                      print(content)
+                  elif i > 3:
+                      continue
+                
     os.chdir(directory_where_you_want_to_save_the_new_file)
     address = pd.series(address_list, name = 'Addresses')
     city = pd.series(city_state_zip_list, name = 'City/State/Zip')
     df = pd.concat([address,city],axis = 1)
 ##    dictionary = {'Stanton Optical Address':address_list,'Stanton Optical City/State/Zip': city_state_zip_list}
 ##    df = pd.DataFrame.from_dict(dictionary)
-    df.to_excel(new_file_name, index = False)                    
+    df.to_excel(stanton_file_name, index = False)                    
 ##          print(ptag.contents)
 ##        next_s = element.nextSibling
 ##        if not (next_s and isinstance(next_s,NavigableString)):
@@ -136,7 +138,7 @@ def stanton_optical_locations():
 ##            if text:
 ##                print("Found:", next_s)
 
-stanton_optical_locations()
+##stanton_optical_locations()
 
 ##
 ##for i, url in enumerate(html.select('a')):
