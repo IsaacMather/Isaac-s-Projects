@@ -75,13 +75,29 @@ new_file_name = "warby_parker_locations.xlsx"
 def pull_warby_parker_locations():
     print(new_file_name)
     address_list = []
-    city_state_zip_list = []
+    suite_list = []
+    city_list = []
+    state_list = []
+    zip_list = []
     raw_html = simple_get('https://www.warbyparker.com/retail')
     html = BeautifulSoup(raw_html, 'html.parser')
     for elem in html.find_all('a', href=re.compile('retail')):
+        print(len(address_list))
+        print(len(city_list))
+        print(len(state_list))
+        print(len(zip_list))
+        print(len(suite_list))
+        print(address_list)
+        print(city_list)
+        print(state_list)
+        print(zip_list)
+        print(suite_list)
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
-        cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
+        try:
+            cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
+        except:
+            pass
         for hyperlink in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
 ##        for elem in cleaned_raw_address_html.find_all('span'):
             for i, span in enumerate(hyperlink.find_all('span')):
@@ -89,10 +105,38 @@ def pull_warby_parker_locations():
                     address_list.append(span.text)
                     print(span.text)
                 elif i == 1:
-                    city_state_zip_list.append(span.text)
-                    print(span.text)
+                    if 'Suite' or 'Space' not in span.text:  #need to get this to identify Suite or Space is in the text!
+                        suite_list.append(' ')
+                        for i, row in enumerate(span.text.split(', ')):
+                            print(i)
+                            print(row)
+                            if i == 0:
+                                city_list.append(row)
+                            elif i == 1:
+                                for i, row in enumerate(row.split(' ')):
+                                    if i == 1:
+                                        state_list.append(row)
+                                    else:
+                                        zip_list.append(row)
+                    elif 'Suite' or 'Space' in span.text:
+                        suite_list.append(span.text)    
+####                    city_state_zip_list.append(span.text)
+                        print(span.text)
+                elif i == 2:
+                    for i, row in enumerate(span.text.split(', ')):
+                        print(i)
+                        print(row)
+                        if i == 0:
+                            city_list.append(row)
+                        elif i == 1:
+                            for i, row in enumerate(row.split(' ')):
+                                if i == 1:
+                                    state_list.append(row)
+                                else:
+                                    zip_list.append(row)
+                    
     os.chdir(directory_where_you_want_to_save_the_new_file)
-    dictionary = {'Warby Parker Address': address_list,'Warby Parker City/State/Zip': city_state_zip_list}
+    dictionary = {'Warby Parker Address': address_list,'Location City': city_list,'Location State': state_list,'Location Zip Code': zip_list}
     df = pd.DataFrame(dictionary)
     df.to_excel(new_file_name, index = False)
 
