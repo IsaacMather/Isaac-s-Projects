@@ -84,16 +84,16 @@ def pull_warby_parker_locations():
     html = BeautifulSoup(raw_html, 'html.parser')
     for elem in html.find_all('a', href=re.compile('retail')):
         print('Address List: ', len(address_list))
-##        print('City List: ', len(city_list))
-##        print('State List: ', len(state_list))
-##        print('Zip List: ', len(zip_list))
+        print('City List: ', len(city_list))
+        print('State List: ', len(state_list))
+        print('Zip List: ', len(zip_list))
         print('Suite List: ', len(suite_list))
         print('City/State/Zip List :', len(city_state_zip_list))
-##        print(address_list)
-##        print(city_list)
-##        print(state_list)
-##        print(zip_list)
-##        print(suite_list)
+        print(address_list)
+        print(city_list)
+        print(state_list)
+        print(zip_list)
+        print(suite_list)
         address_url = 'https://www.warbyparker.com' + elem['href']
         raw_address_html = simple_get(address_url)
         try:
@@ -107,37 +107,37 @@ def pull_warby_parker_locations():
                     address_list.append(span.text)
                     print(span.text)
                 elif i == 1:
-                    if 'Suite' not in span.text and 'Space' not in span.text and 'loor' not in span.text:  #need to get this to identify Suite or Space is in the text! what operator do i need to use?
+                    if 'Suite' not in span.text and 'Space' not in span.text and 'loor' not in span.text and 'ueen' not in span.text and 'ufferin' not in span.text:
                         suite_list.append(' ')
-                        city_state_zip_list.append(span.text)
-##                        for i, row in enumerate(span.text.split(', ')):
-##                            print(i)
-##                            print(row)
-##                            if i == 0:
-##                                city_list.append(row)
-##                            elif i == 1:
-##                                for i, row in enumerate(row.split(' ')):
-##                                    if i == 1:
-##                                        state_list.append(row)
-##                                    else:
-##                                        zip_list.append(row)
+##                        city_state_zip_list.append(span.text)
+                        for i, row in enumerate(span.text.split(', ')):
+                            print(i)
+                            print(row)
+                            if i == 0:
+                                city_list.append(row)
+                            elif i == 1:
+                                for i, row in enumerate(row.split(' ')):
+                                    if i == 1:
+                                        state_list.append(row)
+                                    else:
+                                        zip_list.append(row)
                     elif 'Suite' or 'Space' or 'loor' in span.text:
                         suite_list.append(span.text)    
 ####                    city_state_zip_list.append(span.text)
                         print(span.text)
                 elif i == 2:
-                    city_state_zip_list.append(span.text)
-##                    for i, row in enumerate(span.text.split(', ')):
-##                        print(i)
-##                        print(row)
-##                        if i == 0:
-##                            city_list.append(row)
-##                        elif i == 1:
-##                            for i, row in enumerate(row.split(' ')):
-##                                if i == 1:
-##                                    state_list.append(row)
-##                                if i == 2:
-##                                    zip_list.append(row)
+##                    city_state_zip_list.append(span.text)
+                    for i, row in enumerate(span.text.split(', ')):
+                        print(i)
+                        print(row)
+                        if i == 0:
+                            city_list.append(row)
+                        elif i == 1:
+                            for i, row in enumerate(row.split(' ')):
+                                if i == 0:
+                                    state_list.append(row)
+                                if i == 1:
+                                    zip_list.append(row)
 ##                                else:
 ##                                    zip_list.append(row)
     os.chdir(directory_where_you_want_to_save_the_new_file)
