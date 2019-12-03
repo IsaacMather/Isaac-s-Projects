@@ -89,8 +89,8 @@ def pull_warby_parker_locations():
         print('Zip List: ', len(zip_list))
         print('Suite List: ', len(suite_list))
         print('City/State/Zip List :', len(city_state_zip_list))
-        print(address_list)
-        print(city_list)
+##        print(address_list)
+##        print(city_list)
         print(state_list)
         print(zip_list)
         print(suite_list)
@@ -100,7 +100,7 @@ def pull_warby_parker_locations():
             cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
         except:
             pass
-        for hyperlink in cleaned_raw_address_html.find_all('a', href=re.compile('goo')):
+        for hyperlink in cleaned_raw_address_html.find_all('a', href=re.compile('goo')): #need to add a integer specific spacing for the event that they are opening and there is no zip
 ##        for elem in cleaned_raw_address_html.find_all('span'):
             for i, span in enumerate(hyperlink.find_all('span')):
                 if i == 0:
@@ -109,17 +109,18 @@ def pull_warby_parker_locations():
                 elif i == 1:
                     if 'Suite' not in span.text and 'Space' not in span.text and 'loor' not in span.text and 'ueen' not in span.text and 'ufferin' not in span.text:
                         suite_list.append(' ')
-##                        city_state_zip_list.append(span.text)
+                        city_state_zip_list.append(span.text)
                         for i, row in enumerate(span.text.split(', ')):
                             print(i)
                             print(row)
                             if i == 0:
                                 city_list.append(row)
                             elif i == 1:
+                                print(row)
                                 for i, row in enumerate(row.split(' ')):
-                                    if i == 1:
+                                    if i == 0:
                                         state_list.append(row)
-                                    else:
+                                    if i == 1:
                                         zip_list.append(row)
                     elif 'Suite' or 'Space' or 'loor' in span.text:
                         suite_list.append(span.text)    
@@ -128,8 +129,8 @@ def pull_warby_parker_locations():
                 elif i == 2:
 ##                    city_state_zip_list.append(span.text)
                     for i, row in enumerate(span.text.split(', ')):
-                        print(i)
-                        print(row)
+##                        print(i)
+##                        print(row)
                         if i == 0:
                             city_list.append(row)
                         elif i == 1:
