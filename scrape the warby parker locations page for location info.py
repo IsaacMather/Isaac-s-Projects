@@ -24,6 +24,7 @@ import re
 import urllib
 import pandas as pd
 import time
+import numpy
 
 def simple_get(url):
     """
@@ -80,6 +81,7 @@ def pull_warby_parker_locations():
     city_list = []
     state_list = []
     zip_list = []
+    zip_list = numpy.array(zip_list)
     raw_html = simple_get('https://www.warbyparker.com/retail')
     html = BeautifulSoup(raw_html, 'html.parser')
     for elem in html.find_all('a', href=re.compile('retail')):
@@ -100,7 +102,8 @@ def pull_warby_parker_locations():
             cleaned_raw_address_html = BeautifulSoup(raw_address_html, 'html.parser')
         except:
             pass
-        for hyperlink in cleaned_raw_address_html.find_all('a', href=re.compile('goo')): #need to add a integer specific spacing for the event that they are opening and there is no zip
+        for a, hyperlink in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))): #need to add a integer specific spacing for the event that they are opening and there is no zip
+            zip_list[a] = [' ']
 ##        for elem in cleaned_raw_address_html.find_all('span'):
             for i, span in enumerate(hyperlink.find_all('span')):
                 if i == 0:
@@ -121,7 +124,7 @@ def pull_warby_parker_locations():
                                     if i == 0:
                                         state_list.append(row)
                                     if i == 1:
-                                        zip_list.append(row)
+                                        zip_list[a] = row
                     elif 'Suite' or 'Space' or 'loor' in span.text:
                         suite_list.append(span.text)    
 ####                    city_state_zip_list.append(span.text)
