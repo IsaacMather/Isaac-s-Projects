@@ -103,7 +103,8 @@ def pull_warby_parker_locations():
         except:
             pass
         for a, hyperlink in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))): #need to add a integer specific spacing for the event that they are opening and there is no zip
-            zip_list[a] = [' ']
+            if a > 1:
+                zip_list[a] = [' ']
 ##        for elem in cleaned_raw_address_html.find_all('span'):
             for i, span in enumerate(hyperlink.find_all('span')):
                 if i == 0:
