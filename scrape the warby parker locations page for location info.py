@@ -103,8 +103,7 @@ def pull_warby_parker_locations():
         except:
             pass
         for a, hyperlink in enumerate(cleaned_raw_address_html.find_all('a', href=re.compile('goo'))): #need to add a integer specific spacing for the event that they are opening and there is no zip
-            if a > 1:
-                zip_list[a] = [' ']
+            numpy.concatenate((zip_list,' '))  ### need to find a way to concatenate this empty string to the numpy array, so we can replace the empty string with the zip code in every sitation where there is a zip code, and leave a blank string in situations where the location is coming soon
 ##        for elem in cleaned_raw_address_html.find_all('span'):
             for i, span in enumerate(hyperlink.find_all('span')):
                 if i == 0:
