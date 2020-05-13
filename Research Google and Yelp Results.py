@@ -27,7 +27,7 @@
 #flowchart https://code2flow.com/3sskBv
 
 #what are static types in python? Does adding them speed up the code? also, cython, for adding c performance to your python, eases the heavy lifying for some computationally intensive sections of your code
-
+ 
 #google api key: 
 from __future__ import print_function
 import argparse
